@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import CustomerHome from './pages/CustomerHome';
 import Bookings from './pages/Bookings';
 import Login from './pages/Login';
@@ -8,16 +8,13 @@ import MoversDashboard from './pages/MoversDashboard';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<CustomerHome />} />
-        <Route path="/movers" element={<MoversDashboard />} />
-        <Route path="/bookings" element={<Bookings />} />
-
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-             </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<CustomerHome />} />
+      <Route path="/movers" element={<MoversDashboard />} />
+      <Route path="/bookings" element={<Bookings />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
   );
 }
 
