@@ -1,0 +1,293 @@
+/* General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #f8f9fa;
+  padding-top: 70px; /* Adjust for fixed navbar height */
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #4CAF50 !important;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensures navbar stays above other elements */
+}
+
+.navbar-brand img {
+  max-height: 50px;
+  width: auto;
+  margin-right: 10px;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff !important;
+}
+
+.nav-link {
+  color: white !important;
+  margin-right: 15px;
+  font-size: 1.1rem;
+  transition: color 0.3s, transform 0.2s;
+}
+
+.nav-link:hover {
+  color: #c8e6c9 !important;
+  transform: scale(1.1);
+}
+
+/* CustomerHome Layout */
+.customer-home {
+  min-height: calc(100vh - 70px); /* Full height minus navbar */
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Adds consistent spacing between all sections */
+}
+
+/* Navbar Section */
+.navbar-section {
+  margin-bottom: 20px; /* Space between navbar and carousel */
+}
+
+/* Carousel Section */
+.carousel-section {
+  width: 100%;
+  margin-top: 10px; /* Ensure carousel is below the navbar */
+}
+
+.carousel img {
+  height: 100 vh;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* Search Bar Section */
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+}
+
+.search-bar-container input {
+  width: 30%;
+  margin-right: 10px;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  transition: all 0.3s;
+}
+
+.search-bar-container input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+  outline: none;
+}
+
+.search-bar-container button {
+  padding: 12px 30px;
+  border-radius: 25px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-bar-container button:hover {
+  background-color: #388e3c;
+  transform: scale(1.05);
+}
+
+/* About Cards Section */
+.about-cards-section {
+  margin-top: 20px;
+}
+
+/* Banner Section */
+.banner-section {
+  margin-top: 20px;
+  background: linear-gradient(45deg, #4CAF50, #81C784);
+  color: white;
+  padding: 60px;
+  text-align: center;
+  border-radius: 15px;
+}
+
+.banner h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.banner button {
+  border-radius: 50px;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.banner button:hover {
+  background-color: #388e3c;
+  transform: scale(1.1);
+}
+
+/* MoversDashboard Styles */
+.mover-dashboard {
+  min-height: calc(100vh - 70px);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.availability-table-container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+/* Floating Button */
+.floating-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.floating-button:hover {
+  transform: scale(1.1);
+}
+
+/* Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Popup Content */
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  width: 400px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-content input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.popup-content button {
+  margin-top: 15px;
+  border-radius: 30px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popup-content button:hover {
+  background-color: #388e3c;
+}
+
+/* Footer */
+footer {
+  background-color: #4CAF50;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+
+  .banner h2 {
+    font-size: 2rem;
+  }
+
+  .table th, .table td {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .popup-content {
+    width: 90%;
+  }
+
+  .search-bar-container input {
+    width: 70%;
+  }
+}
