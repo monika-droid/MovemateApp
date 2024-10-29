@@ -1,18 +1,23 @@
-import './App.css';
 import React from 'react';
-import Register from './components/Register/Register'
-import Login from './components/Login/Login'
-import FetchData from './components/User/FetchData/FetchData'
-import VehicleRegistrationForm from './components/VehicleRegistration/VehicleRegistration';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import CustomerHome from './pages/CustomerHome';
+import Bookings from './pages/Bookings';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import MoversDashboard from './pages/MoversDashboard';
+
 function App() {
   return (
-   
-     <>
-     <FetchData/>
-     <Register/>
-     <Login/>
-     <VehicleRegistrationForm />
-     </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<CustomerHome />} />
+        <Route path="/movers" element={<MoversDashboard />} />
+        <Route path="/bookings" element={<Bookings />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+             </Routes>
+    </Router>
   );
 }
 
