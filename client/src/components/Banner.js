@@ -1,13 +1,12 @@
+// Banner.js
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import '../styles/styles.css';
 
 const Banner = ({ onGetQuotation }) => (
-  <div className="banner text-center">
-    <h2>Get Your Moving Quotation Now!</h2>
-    <Button variant="primary" onClick={onGetQuotation}>
-      Get Quotation
-    </Button>
+  <div className="banner-content">
+    <h2>Your Reliable Moving Partner</h2>
+    <p>Get a quote now for a hassle-free moving experience!</p>
+    <button onClick={onGetQuotation} className="banner-button">Get Quotation</button>
   </div>
 );
 

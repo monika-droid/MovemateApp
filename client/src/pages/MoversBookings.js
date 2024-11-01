@@ -2,33 +2,33 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/styles.css';
 
-const MoversBookings = () => {
-  const [bookings, setBookings] = useState([]);
+const MoversBookingpage = () => {
+  const [Bookingpage, setBookingpage] = useState([]);
 
-  const fetchBookings = async () => {
-    const response = await axios.get('http://localhost:5000/api/bookings');
-    setBookings(response.data);
+  const fetchBookingpage = async () => {
+    const response = await axios.get('http://localhost:5000/api/Bookingpage');
+    setBookingpage(response.data);
   };
 
   useEffect(() => {
-    fetchBookings();
+    fetchBookingpage();
   }, []);
 
   const handleAccept = (id) => {
     alert('Ride accepted!');
-    setBookings(bookings.filter((booking) => booking.id !== id));
+    setBookingpage(Bookingpage.filter((booking) => booking.id !== id));
     // Logic to add the ride to upcoming rides
   };
 
   const handleReject = (id) => {
     alert('Ride rejected!');
-    setBookings(bookings.filter((booking) => booking.id !== id));
+    setBookingpage(Bookingpage.filter((booking) => booking.id !== id));
     // Notify customer of rejection
   };
 
   return (
-    <div className="bookings-page">
-      {bookings.map((booking) => (
+    <div className="Bookingpage-page">
+      {Bookingpage.map((booking) => (
         <div className="booking-card" key={booking.id}>
           <h4>{booking.customerName}</h4>
           <p>{booking.location}</p>
@@ -41,4 +41,4 @@ const MoversBookings = () => {
   );
 };
 
-export default MoversBookings;
+export default MoversBookingpage;
