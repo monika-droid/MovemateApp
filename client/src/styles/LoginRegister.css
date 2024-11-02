@@ -35,12 +35,12 @@ body {
 
 /* Left Section - Login Image */
 .left-section.login {
-  background-image: url('../../public/images/L-1.jpg');
+  background-image: url('/Users/anuj/Downloads/MovemateApp/client/public/images/L-1.jpg');
 }
 
 /* Left Section - Register Image */
 .left-section.register {
-  background-image: url('../../public/images/R-1.jpg');
+  background-image: url('/Users/anuj/Downloads/MovemateApp/client/public/images/R-1.jpg');
 }
 
 /* Right Section - Form */

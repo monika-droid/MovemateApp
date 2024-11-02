@@ -18,7 +18,7 @@ const BookingPage = () => {
 
   return (
     <div>
-      <h2>Your Bookingpage</h2>
+      <h2>Your Booking page</h2>
       {bookingData.map((booking) => (
         <div key={booking.id} className="booking-card">
           <h3>{booking.location}</h3>
