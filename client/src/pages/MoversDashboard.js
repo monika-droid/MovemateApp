@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../styles/styles.css';
+import apiService from '../Services/Services'; 
 
+import VehicleRegistrationForm from '../components/VehicleRegistration';
 const MoversDashboard = () => {
   const [availability, setAvailability] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -12,6 +14,24 @@ const MoversDashboard = () => {
     time: '',
     location: '',
   });
+  
+  const[error, setError] = useState()
+  const [moverDetails, setMoverDetails] = useState(null);
+  useEffect(() => {
+    const fetchMoverDetails = async () => {
+      try {
+        const response = await apiService.get(`/vehicleData/${user.email}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`, 
+          },
+        });
+        setMoverDetails(response.data);
+      } catch (error) {
+        console.error("Error fetching mover details:", error);
+        setError("Failed to fetch mover details.");
+      }
+    };
+  },[]); // Fetch details when user or token changes
 
   const handleAddAvailability = () => {
     setShowForm(true);
@@ -35,15 +55,17 @@ const MoversDashboard = () => {
   const handleDelete = (index) => {
     setAvailability(availability.filter((_, i) => i !== index));
   };
+  
 
   return (
     <div>
-      <Navbar userType="mover" />
-      
+      <Navbar userType="mover" />      
       {/* Banner Section */}
       <section className="banner-section">
         <img src="images/Slide-1.jpg" alt="Banner" className="banner-image" />
       </section>
+
+      <VehicleRegistrationForm/>
       
       {/* Availability Table */}
       <section className="availability-section">

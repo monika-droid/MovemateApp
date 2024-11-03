@@ -1,6 +1,6 @@
 const express = require('express');
 const { register, login } = require('../controller/RegisterController');
-const { addVehicle } = require("../controller/VehicleController");
+const { addVehicle, getVehiclesByEmail } = require("../controller/VehicleController");
 const multer = require("multer");
 
 const router = express.Router();
@@ -21,6 +21,9 @@ const uploadMiddleware = multer({ storage });
 // Routes
 router.post('/register', register);
 router.post('/login', login);
-router.post("/add", uploadMiddleware.single("vehicle_image"), addVehicle);
-
+router.post("/vehicle", uploadMiddleware.single("vehicle_image"), addVehicle);
+router.get("/test", (req, res) => {
+  res.send("Test route is working");
+});
+router.get("/vehicleData/:email", getVehiclesByEmail);
 module.exports = router;
