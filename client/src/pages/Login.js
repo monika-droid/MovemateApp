@@ -1,47 +1,54 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import '../styles/LoginRegister.css';
+import { useAuth } from '../Context/AuthContext';
+import { NavLink } from 'react-router-dom';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [message, setMessage] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleLoginChange = (e) => {
+    setLoginForm({
+      ...loginForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      localStorage.setItem('token', res.data.token);
-      res.data.role === 'customer' ? navigate('/customer-home') : navigate('/mover-home');
+      await login(loginForm);
+      setMessage('Login successful');
     } catch (error) {
-      alert('Login failed');
+      setMessage(error.response?.data?.message || 'An error occurred during login');
     }
   };
+
 
   return (
     <div className="login-register-container">
       <div className="left-section login"></div>
       <div className="right-section">
         <h2>Login</h2>
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit">Login</button>
-        </form>
-        <p className="link" onClick={() => navigate('/register')}>
-          Don't have an account? Register
-        </p>
+        <form onSubmit={handleLoginSubmit}>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          onChange={handleLoginChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          onChange={handleLoginChange}
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
+      {message && <p>{message}</p>}
+      <NavLink to="/register">Don't have an account? Register</NavLink>
       </div>
     </div>
   );

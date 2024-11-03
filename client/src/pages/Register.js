@@ -1,24 +1,65 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import '../styles/LoginRegister.css';
-
+import { useNavigate, NavLink } from 'react-router-dom';
+import apiService from '../Services/Services';
 const Register = () => {
-  const [user, setUser] = useState({ name: '', email: '', password: '', role: '' });
-  const navigate = useNavigate();
+  const [registerForm, setRegisterForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    userType: '',  
+    password: '',
+    confirmPassword: ''
+  });
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('http://localhost:5000/api/auth/register', user);
-      navigate('/login');
-    } catch (error) {
-      alert('Registration failed');
-    }
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState('');
+
+  // Input validation functions
+  const validateForm = () => {
+    const newErrors = {};
+    if (!validateName(registerForm.name)) newErrors.name = true;
+    if (!validateEmail(registerForm.email)) newErrors.email = true;
+    if (!validatePhone(registerForm.phone)) newErrors.phone = true;
+    if (!validatePassword(registerForm.password)) newErrors.password = true;
+    if (!validateConfirmPassword(registerForm.password, registerForm.confirmPassword)) newErrors.confirmPassword = true;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const validateName = (name) => name.trim() !== '';
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const validatePhone = (phone) => /^\d{10}$/.test(phone); // Example: 10 digits phone number
+  const validatePassword = (password) => password.length >= 6;
+  const validateConfirmPassword = (password, confirmPassword) => password === confirmPassword;
+
+  const handleRegisterChange = (e) => {
+    const { name, value } = e.target;
+
+    // Trim the value to remove leading/trailing whitespace
+    const trimmedValue = value.trim();
+
+    setRegisterForm({
+      ...registerForm,
+      [name]: trimmedValue
+    });
+
+    // Check overall form validity on every change
+    validateForm();
+  };
+
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      setMessage('Please fill out all fields correctly');
+      return;
+    }
+    try {
+      const response = await apiService.post('/register', registerForm);
+      setMessage(response.message || 'Registration successful');
+    } catch (error) {
+      setMessage(error.message || 'An error occurred');
+    }
   };
 
   return (
@@ -26,42 +67,71 @@ const Register = () => {
       <div className="left-section register"></div>
       <div className="right-section">
         <h2>Register</h2>
-        <form onSubmit={handleRegister}>
-          <input 
-            type="text" 
-            name="name" 
-            placeholder="Name" 
-            onChange={handleChange} 
-            required 
+        <form onSubmit={handleRegisterSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={registerForm.name}
+            onChange={handleRegisterChange}
           />
-          <input 
-            type="email" 
-            name="email" 
-            placeholder="Email" 
-            onChange={handleChange} 
-            required 
+          {errors.name && <span className="error">Name is required</span>}
+          
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={registerForm.email}
+            onChange={handleRegisterChange}
           />
-          <input 
-            type="password" 
-            name="password" 
-            placeholder="Password" 
-            onChange={handleChange} 
-            required 
+          {errors.email && <span className="error">Invalid email</span>}
+          
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={registerForm.phone}
+            onChange={handleRegisterChange}
           />
-          <select 
-            name="role" 
-            onChange={handleChange} 
+          {errors.phone && <span className="error">Invalid phone number</span>}
+          
+          <select
+            name="userType"
+            value={registerForm.userType}
+            onChange={handleRegisterChange}
             required
           >
-            <option value="">Register as</option>
-            <option value="customer">Customer</option>
-            <option value="mover">Mover</option>
+            <option value="">Select User Type</option>
+            <option value="User">User</option>
+            <option value="Mover">Mover</option>
           </select>
-          <button type="submit">Register</button>
+          
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={registerForm.password}
+            onChange={handleRegisterChange}
+          />
+          {errors.password && <span className="error">Password must be at least 6 characters</span>}
+          
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={registerForm.confirmPassword}
+            onChange={handleRegisterChange}
+          />
+          {errors.confirmPassword && <span className="error">Passwords do not match</span>}
+          
+          <button type="submit">
+            Register
+          </button>
         </form>
-        <p className="link" onClick={() => navigate('/login')}>
-          Already have an account? Login
-        </p>
+        
+        <NavLink to="/" className="link">
+          Don't have an account? Register
+        </NavLink>
       </div>
     </div>
   );

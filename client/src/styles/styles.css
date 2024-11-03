@@ -525,3 +525,139 @@ body {
   border-top: 1px solid #ffffff;
   margin-bottom: 0.5rem;
 }
+/* LOGIN AND REGISTER */
+.login-register-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 600px;
+  display: flex;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+/* Left Section - Illustration */
+.left-section {
+  width: 50%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Left Section - Login Image */
+.left-section.login {
+  background-image: url('../../public/images/L-1.jpg');
+}
+
+/* Left Section - Register Image */
+.left-section.register {
+  background-image: url('../../public/images/R-1.jpg');
+}
+
+/* Right Section - Form */
+.right-section {
+  width: 50%;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+/* Form Styles */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input, select {
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: white;
+  color: #666;
+  appearance: none;
+  transition: all 0.3s ease;
+}
+
+/* Placeholder Styling */
+input::placeholder, select {
+  color: #999;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z' fill='%23666'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 16px;
+}
+
+/* Focused Inputs */
+input:focus, select:focus {
+  border-color: #4CAF50;
+  outline: none;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+/* Buttons */
+button {
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Links */
+.link {
+  text-align: center;
+  margin-top: 10px;
+  color: #4CAF50;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.link:hover {
+  color: #388E3C;
+}
+
+/* Title Styles */
+h2 {
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-register-container {
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .left-section {
+    height: 40%;
+    background-size: cover;
+  }
+
+  .right-section {
+    height: 60%;
+    padding: 30px;
+  }
+}
