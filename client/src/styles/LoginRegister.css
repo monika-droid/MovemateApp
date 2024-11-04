@@ -16,8 +16,8 @@ body {
 
 /* Container for Login and Register Pages */
 .login-register-container {
-  width: 900px;
-  height: 600px;
+  width: 150vh;
+  height:auto;
   display: flex;
   border-radius: 15px;
   overflow: hidden;
@@ -35,12 +35,12 @@ body {
 
 /* Left Section - Login Image */
 .left-section.login {
-  background-image: url('/Users/anuj/Downloads/MovemateApp/client/public/images/L-1.jpg');
+  background-image: url('C:\Users\Admin\Documents\GitHub\MovemateApp\client\public\images\L-1.jpg');
 }
 
 /* Left Section - Register Image */
 .left-section.register {
-  background-image: url('/Users/anuj/Downloads/MovemateApp/client/public/images/R-1.jpg');
+  background-image: url('C:\Users\Admin\Documents\GitHub\MovemateApp\client\public\images\R-1.jpg');
 }
 
 /* Right Section - Form */
