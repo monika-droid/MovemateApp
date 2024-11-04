@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../styles/LoginRegister.css';
+import '../styles/styles.css';
 
 const Register = () => {
   const [user, setUser] = useState({ name: '', email: '', password: '', role: '' });
@@ -22,7 +22,7 @@ const Register = () => {
   };
 
   return (
-    <div className="login-register-container">
+    <div className="login-register-container login-body">
       <div className="left-section register"></div>
       <div className="right-section">
         <h2>Register</h2>
