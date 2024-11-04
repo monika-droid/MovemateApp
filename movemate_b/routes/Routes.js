@@ -22,8 +22,8 @@ const uploadMiddleware = multer({ storage });
 router.post('/register', register);
 router.post('/login', login);
 router.post("/vehicle", uploadMiddleware.single("vehicle_image"), addVehicle);
-router.get("/test", (req, res) => {
-  res.send("Test route is working");
-});
 router.get("/vehicleData/:email", getVehiclesByEmail);
+router.post("/availability", addAvailability);
+router.get("/availability", getAvailability);
+
 module.exports = router;
