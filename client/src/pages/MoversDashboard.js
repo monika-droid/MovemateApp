@@ -3,9 +3,11 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../styles/styles.css';
 import apiService from '../Services/Services'; 
-
 import VehicleRegistrationForm from '../components/VehicleRegistration';
+import { useAuth } from '../Context/AuthContext';
 const MoversDashboard = () => {
+  const {user, authToken} = useAuth();
+  console.log("user", user, "AuthToken", authToken)
   const [availability, setAvailability] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -16,7 +18,8 @@ const MoversDashboard = () => {
   });
   
   const[error, setError] = useState()
-  const [moverDetails, setMoverDetails] = useState(null);
+  const [vehicleId, setVehicleId] = useState(false);
+  const [moverId, setMoverId] = useState()
   useEffect(() => {
     const fetchMoverDetails = async () => {
       try {
@@ -25,14 +28,23 @@ const MoversDashboard = () => {
             Authorization: `Bearer ${authToken}`, 
           },
         });
-        setMoverDetails(response.data);
+        if(response.data === 0){
+          console.log("No details Available")
+        }else{
+          setVehicleId(response.data)
+          console.log(vehicleId)
+        }
       } catch (error) {
         console.error("Error fetching mover details:", error);
         setError("Failed to fetch mover details.");
       }
     };
-  },[]); // Fetch details when user or token changes
-
+  
+    if (user) {
+      fetchMoverDetails();
+    }
+  }, [user, authToken]); 
+  
   const handleAddAvailability = () => {
     setShowForm(true);
   };
@@ -64,9 +76,7 @@ const MoversDashboard = () => {
       <section className="banner-section">
         <img src="images/Slide-1.jpg" alt="Banner" className="banner-image" />
       </section>
-
-      <VehicleRegistrationForm/>
-      
+     { !vehicleId ? <VehicleRegistrationForm moverId={user.email}/> : <div className='availabliltyTableandbutton'>
       {/* Availability Table */}
       <section className="availability-section">
         <h2>My Availability</h2>
@@ -99,7 +109,8 @@ const MoversDashboard = () => {
 
       {/* Plus Icon Button */}
       <button className="add-btn" onClick={handleAddAvailability}>+</button>
-      
+    </div>}
+   
       {/* Add Availability Form Popup */}
       {showForm && (
         <div className="form-popup">

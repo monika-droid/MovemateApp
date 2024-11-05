@@ -5,10 +5,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CustomerHome from './pages/CustomerHome';
 import MoversDashboard from './pages/MoversDashboard';
+import { AuthProvider } from './Context/AuthContext';
 
 function App() {
   return (
-    
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -23,6 +24,7 @@ function App() {
           element={ <MoversDashboard /> }
         />
       </Routes>
+      </AuthProvider>
   );
 }
 

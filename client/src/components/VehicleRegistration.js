@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import apiService from '../Services/Services'; 
+import { useNavigate } from 'react-router-dom';
 
-const VehicleRegistrationForm = () => {
+const VehicleRegistrationForm = ({moverId}) => {
+  console.log(moverId)
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     licence_number: '',
-    mover_id: '',
+    mover_id: moverId? moverId:'',
     vehicle_type: '',
     space_capacity: '',
     passenger_capacity: '',
@@ -15,7 +18,6 @@ const VehicleRegistrationForm = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage] = useState('');
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({
@@ -71,23 +73,23 @@ const VehicleRegistrationForm = () => {
     }
     if (image) formData.append('vehicle_image', image);
   
-    // Log formData content to verify
     for (let pair of formData.entries()) {
       console.log(pair[0] + ': ' + pair[1]);
     }
   
-    try {
+    try {      
       const response = await apiService.postFormData('/vehicle', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       setMessage(response.data.message || 'Vehicle registered successfully');
+      navigate('/mover');
+
     } catch (error) {
       setMessage(error.response?.data?.error || 'Failed to register vehicle');
     }
   };
-  
 
   return (
     <div className="vehicle-registration-form">
@@ -174,6 +176,7 @@ const VehicleRegistrationForm = () => {
         <div className="form-group">
           <label>Availability Status</label>
           <select name="availability_status" value={form.availability_status} onChange={handleChange} required>
+            <option value="val">select</option>
             <option value="true">Available</option>
             <option value="false">Unavailable</option>
           </select>
