@@ -1,7 +1,7 @@
 const express = require('express');
 const { register, login } = require('../controller/RegisterController');
 const { addVehicle } = require("../controller/VehicleController");
-const { addAvailability, getAvailability } = require("../controller/MoverAvailabilityController");
+const { addAvailability, getAvailability, updateAvailability, deleteAvailability } = require("../controller/MoverAvailabilityController");
 const multer = require("multer");
 
 const router = express.Router();
@@ -25,6 +25,8 @@ router.post('/login', login);
 router.post("/add", uploadMiddleware.single("vehicle_image"), addVehicle);
 
 router.post("/availability", addAvailability);
-router.get("/availability", getAvailability);
+router.get("/availability/:moverId", getAvailability);
+router.put("/availability/:id", updateAvailability);
+router.delete("/availability/:id", deleteAvailability);
 
 module.exports = router;

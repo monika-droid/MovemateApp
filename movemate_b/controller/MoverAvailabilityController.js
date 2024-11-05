@@ -1,35 +1,67 @@
 const MoverAvailability = require("../model/MoverAvailabilityModel");
 
-// Add Availability
 const addAvailability = async (req, res) => {
-  const { mover_id, province, city, date } = req.body;
+  const { day, date, time, province, city, pricePerKm } = req.body;
 
   try {
-    const newAvailability = new MoverAvailability({
-      mover_id,
+    const newAvailability = new MoverData({
+      day,
+      date,
+      time,
       province,
       city,
-      date
+      pricePerKm,
     });
 
-    await newAvailability.save();
-    res.status(201).json({ message: "Availability added successfully", data: newAvailability });
+
+    await availability.save();
+    res.status(201).json({ message: "Availability added successfully", data: availability });
   } catch (error) {
     res.status(500).json({ error: "Failed to add availability" });
   }
 };
 
-// Fetch Availability
 const getAvailability = async (req, res) => {
+  const { moverId } = req.params;
+
   try {
-    const availabilities = await MoverAvailability.find();
-    res.status(200).json({ data: availabilities });
+    const availabilities = await MoverAvailability.find({ moverId });
+    res.status(200).json(availabilities);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch availability" });
+    res.status(500).json({ error: "Failed to retrieve availability" });
+  }
+};
+
+const updateAvailability = async (req, res) => {
+  const { id } = req.params;
+  const { day, date, time, province, city, pricePerKm } = req.body;
+
+  try {
+    const availability = await MoverAvailability.findByIdAndUpdate(
+      id,
+      { day, date, time, province, city, pricePerKm },
+      { new: true }
+    );
+    res.status(200).json({ message: "Availability updated successfully", data: availability });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update availability" });
+  }
+};
+
+const deleteAvailability = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await MoverAvailability.findByIdAndDelete(id);
+    res.status(200).json({ message: "Availability deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete availability" });
   }
 };
 
 module.exports = {
   addAvailability,
-  getAvailability
+  getAvailability,
+  updateAvailability,
+  deleteAvailability
 };
