@@ -130,7 +130,7 @@ const Register = () => {
         </form>
         
         <NavLink to="/" className="link">
-          Don't have an account? Register
+          Already Have Account? Login
         </NavLink>
       </div>
     </div>
