@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import AvailabilityForm from '../components/AvailabilityForm'; // Ensure you have this component
 import '../styles/styles.css';
 import apiService from '../Services/Services'; 
 import VehicleRegistrationForm from '../components/VehicleRegistration';
@@ -45,23 +46,37 @@ const MoversDashboard = () => {
     }
   }, [user, authToken]); 
   
+  const [editingIndex, setEditingIndex] = useState(null);
+
   const handleAddAvailability = () => {
+    setEditingIndex(null); // Reset editing index for new entry
     setShowForm(true);
   };
 
-  const handleFormChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleFormSubmit = (data) => {
+    if (data === null) {
+      setShowForm(false);
+      return; // Early return if the form is closed
+    }
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setAvailability([...availability, formData]);
-    setFormData({ day: '', date: '', time: '', location: '' });
+    if (editingIndex !== null) {
+      // Edit existing availability
+      const updatedAvailability = availability.map((item, index) =>
+        index === editingIndex ? data : item
+      );
+      setAvailability(updatedAvailability);
+    } else {
+      // Add new availability
+      setAvailability([...availability, data]);
+    }
+
+    // Reset form state and close the form
     setShowForm(false);
   };
 
   const handleEdit = (index) => {
-    // Logic to edit availability
+    setEditingIndex(index);
+    setShowForm(true);
   };
 
   const handleDelete = (index) => {
@@ -71,7 +86,8 @@ const MoversDashboard = () => {
 
   return (
     <div>
-      <Navbar userType="mover" />      
+      <Navbar userType="mover" />
+
       {/* Banner Section */}
       <section className="banner-section">
         <img src="images/Slide-1.jpg" alt="Banner" className="banner-image" />
@@ -86,7 +102,9 @@ const MoversDashboard = () => {
               <th>Day</th>
               <th>Date</th>
               <th>Time</th>
-              <th>Location</th>
+              <th>Province</th>
+              <th>City</th>
+              <th>Price per KM</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -96,7 +114,9 @@ const MoversDashboard = () => {
                 <td>{item.day}</td>
                 <td>{item.date}</td>
                 <td>{item.time}</td>
-                <td>{item.location}</td>
+                <td>{item.province}</td>
+                <td>{item.city}</td>
+                <td>{item.pricePerKm}</td>
                 <td>
                   <button onClick={() => handleEdit(index)} className="edit-btn">Edit</button>
                   <button onClick={() => handleDelete(index)} className="delete-btn">Delete</button>
@@ -114,43 +134,10 @@ const MoversDashboard = () => {
       {/* Add Availability Form Popup */}
       {showForm && (
         <div className="form-popup">
-          <form onSubmit={handleFormSubmit}>
-            <h3>Add Availability</h3>
-            <input
-              type="text"
-              name="day"
-              placeholder="Day"
-              value={formData.day}
-              onChange={handleFormChange}
-              required
-            />
-            <input
-              type="date"
-              name="date"
-              placeholder="Date"
-              value={formData.date}
-              onChange={handleFormChange}
-              required
-            />
-            <input
-              type="time"
-              name="time"
-              placeholder="Time"
-              value={formData.time}
-              onChange={handleFormChange}
-              required
-            />
-            <input
-              type="text"
-              name="location"
-              placeholder="Location"
-              value={formData.location}
-              onChange={handleFormChange}
-              required
-            />
-            <button type="submit" className="submit-btn">Add</button>
-            <button onClick={() => setShowForm(false)} className="cancel-btn">Cancel</button>
-          </form>
+          <AvailabilityForm 
+            onSubmit={handleFormSubmit} 
+            initialData={editingIndex !== null ? availability[editingIndex] : {}} // Pass existing data for editing
+          />
         </div>
       )}
 
@@ -158,7 +145,7 @@ const MoversDashboard = () => {
       <section className="tagline-section">
         <p>Empowering Movers, One Job at a Time!</p>
       </section>
-      
+
       {/* Footer */}
       {/* <Footer userType="mover" /> */}
     </div>
