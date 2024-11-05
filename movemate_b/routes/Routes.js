@@ -3,7 +3,6 @@ const { register, login } = require('../controller/RegisterController');
 const { addVehicle, getVehiclesByEmail } = require("../controller/VehicleController");
 const { addAvailability, getAvailability, updateAvailability, deleteAvailability } = require("../controller/MoverAvailabilityController");
 const multer = require("multer");
-const {addAvailability,getAvailability} = require("../controller/MoverAvailabilityController")
 const router = express.Router();
 
 // Configure multer storage
