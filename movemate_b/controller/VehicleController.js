@@ -35,10 +35,10 @@ const addVehicle = async (req, res) => {
 
 const getVehiclesByEmail = async (req, res) => {
   console.log("Inside getVehiclesByEmail function");
-  const { email } = req.params; // Assuming email is passed as a URL parameter
+  const { email } = req.params; 
 
   try {
-    const vehicles = await Vehicle.find({ mover_id: email }); // Fetch vehicles by mover_id
+    const vehicles = await Vehicle.find({ mover_id: email });
 
     if (!vehicles.length) {
       return res.status(200).json({ data: null, message: "No vehicles found for this email." });
