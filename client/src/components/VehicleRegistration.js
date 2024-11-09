@@ -1,13 +1,14 @@
+// src/components/VehicleRegistrationForm.js
 import React, { useState } from 'react';
-import apiService from '../Services/Services'; 
+import apiService from '../Services/Services';  // Import your API service
 import { useNavigate } from 'react-router-dom';
+import Popup from './Popup';  // Import Popup component
 
-const VehicleRegistrationForm = ({moverId}) => {
-  console.log(moverId)
+const VehicleRegistrationForm = ({ moverId }) => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     licence_number: '',
-    mover_id: moverId? moverId:'',
+    mover_id: moverId ? moverId : '',
     vehicle_type: '',
     space_capacity: '',
     passenger_capacity: '',
@@ -18,6 +19,9 @@ const VehicleRegistrationForm = ({moverId}) => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(null); // Success or error status
+  const [showPopup, setShowPopup] = useState(false); // Control popup visibility
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({
@@ -38,9 +42,19 @@ const VehicleRegistrationForm = ({moverId}) => {
   const validateField = (name, value) => {
     let error = '';
 
-    if (!value) error = `${name.replace('_', ' ')} is required`;
-    else if ((name === 'space_capacity' || name === 'passenger_capacity' || name === 'price_per_km') && isNaN(value)) {
-      error = `${name.replace('_', ' ')} must be a number`;
+    if (!value) {
+      error = `${name.replace('_', ' ')} is required`;
+    } else if (name === 'space_capacity' || name === 'passenger_capacity' || name === 'price_per_km') {
+      if (isNaN(value) || value <= 0) {
+        error = `${name.replace('_', ' ')} must be a positive number`;
+      }
+    } else if (name === 'licence_number') {
+      const regex = /^[A-Z0-9]{1,3}\s?[A-Z0-9]{1,4}$/i; // Example Canadian license format
+      if (!regex.test(value)) {
+        error = 'Licence number must be in the format: ABC 1234';
+      }
+    } else if (name === 'availability_status' && !['true', 'false'].includes(value)) {
+      error = 'Please select availability status';
     }
 
     setErrors((prevErrors) => ({
@@ -52,7 +66,15 @@ const VehicleRegistrationForm = ({moverId}) => {
   };
 
   const validateForm = () => {
-    const fields = ['licence_number', 'mover_id', 'vehicle_type', 'space_capacity', 'passenger_capacity', 'price_per_km', 'availability_status'];
+    const fields = [
+      'licence_number',
+      'mover_id',
+      'vehicle_type',
+      'space_capacity',
+      'passenger_capacity',
+      'price_per_km',
+      'availability_status',
+    ];
     let isValid = true;
     fields.forEach((field) => {
       if (!validateField(field, form[field])) isValid = false;
@@ -64,31 +86,41 @@ const VehicleRegistrationForm = ({moverId}) => {
     e.preventDefault();
     if (!validateForm()) {
       setMessage('Please fill out all fields correctly.');
+      setIsSuccess(false);
+      setShowPopup(true);
       return;
     }
-  
+
     const formData = new FormData();
     for (const key in form) {
       formData.append(key, form[key]);
     }
     if (image) formData.append('vehicle_image', image);
-  
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
-    }
-  
-    try {      
+
+    try {
       const response = await apiService.postFormData('/vehicle', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setMessage(response.data.message || 'Vehicle registered successfully');
-      navigate('/mover');
 
+      // Success: Show message, reload the page
+      setMessage(response.data.message || 'Vehicle registered successfully');
+      setIsSuccess(true);
+      setShowPopup(true);
+
+      // Reload page after a delay to allow the message to display
+      setTimeout(() => window.location.reload(), 2000); 
     } catch (error) {
+      // Error: Show error message
       setMessage(error.response?.data?.error || 'Failed to register vehicle');
+      setIsSuccess(false);
+      setShowPopup(true);
     }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);  // Close the popup
   };
 
   return (
@@ -190,7 +222,15 @@ const VehicleRegistrationForm = ({moverId}) => {
 
         <button type="submit">Register Vehicle</button>
       </form>
-      {message && <p className="message">{message}</p>}
+
+      {/* Show the Popup on success/error */}
+      {showPopup && (
+        <Popup
+          message={message}
+          onClose={closePopup}
+          isSuccess={isSuccess}
+        />
+      )}
     </div>
   );
 };
