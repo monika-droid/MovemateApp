@@ -56,7 +56,13 @@ const Register = () => {
     }
     try {
       const response = await apiService.post('/register', registerForm);
-      setMessage(response.message || 'Registration successful');
+      setPopupMessage(response.message || 'Registration successful');
+      setShowPopup(true);
+
+      // Redirect to login page after successful registration
+      setTimeout(() => {
+        navigate('/login');  // Redirect to login page after 2 seconds
+      }, 2000); // 2 seconds delay for user to read the success message
     } catch (error) {
       setMessage(error.message || 'An error occurred');
     }

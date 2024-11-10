@@ -14,7 +14,10 @@ const CustomerHome = () => {
     <div>
       <Navbar />
       <HeroSection />
-      <SearchMovers />
+      <Services />
+      <AboutUs />
+      <Testimonials />
+      <HowItWorks />
       <Footer userType="customer" />
     </div>
   );
