@@ -8,7 +8,6 @@ const Routes = require('./routes/Routes')
 const app = express();
 dotenv.config();
 
-
 // middleware
 app.use(express.json());
 app.use(cors());
