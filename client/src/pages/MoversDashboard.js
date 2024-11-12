@@ -1,7 +1,9 @@
+// src/pages/MoversDashboard.js
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Header from '../components/Header';
 import Footer from '../components/Footer';
-import AvailabilityForm from '../components/AvailabilityForm';
+import TaglineSection from '../components/TaglineSection';
+import AvailabilityForm from '../components/AvailabilityForm'; // Ensure you have this component
 import '../styles/styles.css';
 import apiService from '../Services/Services';
 import VehicleRegistrationForm from '../components/VehicleRegistration';
@@ -25,6 +27,8 @@ const MoversDashboard = () => {
         console.error("Error fetching mover details:", error);
       }
     };
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [error, setError] = useState();
 
     if (user) fetchMoverDetails();
   }, [user, authToken]);
@@ -72,6 +76,7 @@ const MoversDashboard = () => {
     } catch (error) {
       console.error("Error adding availability:", error);
     }
+    setShowForm(false); // Close form after submission
   };
 
   const handleDelete = async (id) => {
@@ -98,79 +103,91 @@ const MoversDashboard = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchMoverDetails = async () => {
+      try {
+        const response = await apiService.get(`/vehicleData/${user.email}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        if (response.data !== 0) {
+          setVehicleId(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching mover details:", error);
+        setError("Failed to fetch mover details.");
+      }
+    };
+  
+    if (user) {
+      fetchMoverDetails();
+    }
+  }, [user, authToken]);
+
   return (
-    <div>
-      <Navbar userType="mover" />
-      <section className="banner-section">
-        <img src="images/Slide-1.jpg" alt="Banner" className="banner-image" />
-      </section>
-      {!vehicleId ? (
-        <VehicleRegistrationForm moverId={user.email} />
-      ) : (
-        <div className='availability-table-and-button'>
-          <section className="availability-section">
-            <h2>My Availability</h2>
-            <table className="availability-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Province</th>
-                  <th>City</th>
-                  <th>Price per KM</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {availability.map((item) => (
-                  <tr key={item._id}>
-                    <td>{new Date(item.date).toLocaleDateString()}</td> {/* Format the date */}
-                    <td>{item.time}</td>
-                    <td>{item.province}</td>
-                    <td>{item.city}</td>
-                    <td>{item.pricePerKm}</td>
-                    <td>
-                      <button onClick={() => handleDelete(item._id)} className="delete-btn">Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-          <button className="add-btn" onClick={handleAddAvailability}>+</button>
-        </div>
-      )}
-      {showForm && (
-        <div className="form-popup">
-          <AvailabilityForm onSubmit={handleFormSubmit} />
-        </div>
-      )}
-      <section className="ride-requests-section">
-        <h2>Ride Requests</h2>
-        {rideRequests.length > 0 ? (
-          <ul>
-            {rideRequests.map((request) => (
-              <li key={request._id}>
-                <p>User: {request.userId}</p>
-                <p>Date: {new Date(request.date).toLocaleDateString()}</p> {/* Format the date */}
-                <p>Time: {request.time}</p>
-                <p>Status: {request.status}</p>
-                {request.status === 'pending' && (
-                  <>
-                    <button onClick={() => handleRideRequestUpdate(request._id, 'confirmed')}>Confirm</button>
-                    <button onClick={() => handleRideRequestUpdate(request._id, 'rejected')}>Reject</button>
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Header userType="mover" />
+
+      {/* Content section */}
+      <div style={{ flex: 1 }}>
+        <section className="banner-section">
+          <img src="images/Slide-1.jpg" alt="Banner" className="banner-image" />
+        </section>
+
+        {/* Conditional rendering for Vehicle Registration and Availability Table */}
+        {!vehicleId ? (
+          <VehicleRegistrationForm moverId={user.email} />
         ) : (
-          <p>No ride requests at this time.</p>
+          <div className="availability-table-section">
+            <section className="availability-section">
+              <h2>My Availability</h2>
+              <table className="availability-table">
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Province</th>
+                    <th>City</th>
+                    <th>Price per KM</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {availability.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.day}</td>
+                      <td>{item.date}</td>
+                      <td>{item.time}</td>
+                      <td>{item.province}</td>
+                      <td>{item.city}</td>
+                      <td>{item.pricePerKm}</td>
+                      <td>
+                        <button onClick={() => handleEdit(index)} className="edit-btn">Edit</button>
+                        <button onClick={() => handleDelete(index)} className="delete-btn">Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          </div>
         )}
-      </section>
-      <section className="tagline-section">
-        <p>Empowering Movers, One Job at a Time!</p>
-      </section>
+
+        {showForm && (
+          <div className="form-popup">
+            <AvailabilityForm 
+              onSubmit={handleFormSubmit} 
+              initialData={editingIndex !== null ? availability[editingIndex] : {}} 
+            />
+          </div>
+        )}
+
+        <button className="add-btn" onClick={handleAddAvailability}>+</button>
+      </div>
+
+      <Footer style={{ marginTop: 'auto' }} />
     </div>
   );
 };

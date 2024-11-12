@@ -1,17 +1,19 @@
 // src/App.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import Home from './Landing/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CustomerHome from './pages/CustomerHome';
 import MoversDashboard from './pages/MoversDashboard';
 import { AuthProvider } from './Context/AuthContext';
-
+import Home from './pages/Home';
 function App() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/user"

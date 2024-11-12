@@ -69,7 +69,7 @@ const Register = () => {
 
       // Redirect to login page after successful registration
       setTimeout(() => {
-        navigate('/');  // Redirect to login page after 2 seconds
+        navigate('/login');  // Redirect to login page after 2 seconds
       }, 2000); // 2 seconds delay for user to read the success message
     } catch (error) {
       setPopupMessage(error.message.message || 'An error occurred');
@@ -187,7 +187,7 @@ const Register = () => {
           <button type="submit">Register</button>
         </form>
 
-        <NavLink to="/" className="link">
+        <NavLink to="/login" className="link">
           Already Have Account? Login
         </NavLink>
 
