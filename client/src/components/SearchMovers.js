@@ -1,26 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import apiService from '../Services/Services';
 import { useAuth } from '../Context/AuthContext';
+import axios from 'axios';
 
 const SearchMovers = () => {
   const { user } = useAuth();
   const [date, setDate] = useState(null);
-  const [location, setLocation] = useState('');
+  const [province, setProvince] = useState('');
+  const [city, setCity] = useState('');
+  const [provinces, setProvinces] = useState([]);
+  const [cities, setCities] = useState([]);
   const [movers, setMovers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const apiKey = 'NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA==';
+  const headers = { 'X-CSCAPI-KEY': apiKey };
+
+  // Fetch provinces when the component mounts
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const response = await axios.get(
+          'https://api.countrystatecity.in/v1/countries/CA/states',
+          { headers }
+        );
+        setProvinces(response.data);
+      } catch (error) {
+        console.error('Error fetching provinces:', error);
+      }
+    };
+    fetchProvinces();
+  }, []);
+
+  // Fetch cities when a province is selected
+  useEffect(() => {
+    if (province) {
+      const fetchCities = async () => {
+        try {
+          const response = await axios.get(
+            `https://api.countrystatecity.in/v1/countries/CA/states/${province}/cities`,
+            { headers }
+          );
+          setCities(response.data);
+        } catch (error) {
+          console.error('Error fetching cities:', error);
+        }
+      };
+      fetchCities();
+    } else {
+      setCities([]);
+    }
+  }, [province]);
+
   const handleSearch = async () => {
-    if (!date || !location) {
-      alert("Please select a date and enter a location.");
+    if (!date || !city) {
+      alert("Please select a date and a city.");
       return;
     }
 
     try {
       setIsLoading(true);
       const formattedDate = date.toISOString().split('T')[0];
-      const response = await apiService.get(`/searchMovers?date=${formattedDate}&location=${location}`);
+      const response = await apiService.get(`/searchMovers?date=${formattedDate}&location=${city}`);
       setMovers(response);
     } catch (error) {
       console.error("Error fetching movers:", error);
@@ -60,13 +103,37 @@ const SearchMovers = () => {
           placeholderText="Select a date"
         />
 
-        <label>Enter Location:</label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="City, Province"
-        />
+        <label>Select Province:</label>
+        <select
+          value={province}
+          onChange={(e) => {
+            setProvince(e.target.value);
+            setCity('');
+          }}
+          required
+        >
+          <option value="">Select Province</option>
+          {provinces.map((prov) => (
+            <option key={prov.iso2} value={prov.iso2}>
+              {prov.name}
+            </option>
+          ))}
+        </select>
+
+        <label>Select City:</label>
+        <select
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          disabled={!province}
+          required
+        >
+          <option value="">Select City</option>
+          {cities.map((c) => (
+            <option key={c.id} value={c.name}>
+              {c.name}
+            </option>
+          ))}
+        </select>
 
         <button onClick={handleSearch} disabled={isLoading}>
           {isLoading ? "Searching..." : "Search Movers"}

@@ -124,7 +124,7 @@ const MoversDashboard = () => {
               <tbody>
                 {availability.map((item) => (
                   <tr key={item._id}>
-                    <td>{item.date}</td>
+                    <td>{new Date(item.date).toLocaleDateString()}</td> {/* Format the date */}
                     <td>{item.time}</td>
                     <td>{item.province}</td>
                     <td>{item.city}</td>
@@ -152,7 +152,7 @@ const MoversDashboard = () => {
             {rideRequests.map((request) => (
               <li key={request._id}>
                 <p>User: {request.userId}</p>
-                <p>Date: {new Date(request.date).toLocaleDateString()}</p>
+                <p>Date: {new Date(request.date).toLocaleDateString()}</p> {/* Format the date */}
                 <p>Time: {request.time}</p>
                 <p>Status: {request.status}</p>
                 {request.status === 'pending' && (

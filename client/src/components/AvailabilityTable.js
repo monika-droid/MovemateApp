@@ -64,9 +64,10 @@ const AvailabilityTable = ({ moverId }) => {
         <tbody>
           {availabilityData.map((availability) => (
             <tr key={availability._id}>
-              <td>{new Date(availability.date).toLocaleDateString()}</td>
+              <td>{new Date(availability.date).toISOString().slice(0, 10)}</td> {/* Formats as YYYY-MM-DD */}
               <td>{availability.time}</td>
-              <td>{`${availability.city}, ${availability.province}`}</td>
+              <td>{availability.province}</td>
+              <td>{availability.city}</td>
               <td>{availability.pricePerKm}</td>
               <td>
                 <button onClick={() => handleEdit(availability)}>Edit</button>
