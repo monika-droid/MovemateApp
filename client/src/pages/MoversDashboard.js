@@ -32,9 +32,10 @@ const MoversDashboard = () => {
         ]);
 
         setVehicleId(vehicleResponse.data || null);
-        console.log(vehicleId)
-        setAvailability(availabilityResponse.data || []);
-        setRideRequests(rideRequestsResponse.data || []);
+        console.log("Vehicle",vehicleId)
+        setAvailability(availabilityResponse || []);
+        console.log("AVailll",availability)
+        setRideRequests(rideRequestsResponse || []);
       } catch (error) {
         console.error("Error fetching mover data:", error);
         setError("Failed to fetch mover data.");
@@ -149,6 +150,32 @@ const MoversDashboard = () => {
 
         <button className="add-btn" onClick={handleAddAvailability}>+</button>
       </div>
+      <section className="ride-requests-section">
+        <h2>Ride Requests</h2>
+        {rideRequests.length > 0 ? (
+          <ul>
+            {rideRequests.map((request) => (
+              <li key={request._id}>
+                <p>User: {request.userId}</p>
+                <p>Date: {new Date(request.date).toLocaleDateString()}</p> {/* Format the date */}
+                <p>Time: {request.time}</p>
+                <p>Status: {request.status}</p>
+                {request.status === 'pending' && (
+                  <>
+                    <button onClick={() => handleRideRequestUpdate(request._id, 'confirmed')}>Confirm</button>
+                    <button onClick={() => handleRideRequestUpdate(request._id, 'rejected')}>Reject</button>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No ride requests at this time.</p>
+        )}
+      </section>
+      <section className="tagline-section">
+        <p>Empowering Movers, One Job at a Time!</p>
+      </section>
 
       <Footer style={{ marginTop: 'auto' }} />
     </div>
