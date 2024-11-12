@@ -10,6 +10,7 @@ const LocationPicker = () => {
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
+  const [searchResults, setSearchResults] = useState(null); // State to hold search results
 
   const apiKey = 'NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA==';
   const headers = {
@@ -51,6 +52,24 @@ const LocationPicker = () => {
       setCities([]);
     }
   }, [selectedProvince]);
+
+  // Function to handle search
+  const onSearch = () => {
+    if (!selectedProvince || !selectedCity || !selectedDate) {
+      alert('Please select a province, city, and date before searching.');
+      return;
+    }
+    
+    // Mocked search logic for demonstration
+    const results = {
+      province: selectedProvince,
+      city: selectedCity,
+      date: selectedDate.toLocaleDateString(),
+    };
+
+    setSearchResults(results);
+    alert(`Search Results:\nProvince: ${results.province}\nCity: ${results.city}\nDate: ${results.date}`);
+  };
 
   return (
     <div className="container my-4">
@@ -106,6 +125,20 @@ const LocationPicker = () => {
               </div>
             </div>
           </div>
+          <div className="mt-4">
+            <button onClick={onSearch} className="btn btn-primary">
+              Search
+            </button>
+          </div>
+
+          {searchResults && (
+            <div className="mt-4">
+              <h6>Search Results:</h6>
+              <p>Province: {searchResults.province}</p>
+              <p>City: {searchResults.city}</p>
+              <p>Date: {searchResults.date}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
