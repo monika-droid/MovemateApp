@@ -1,11 +1,13 @@
 const User = require('../model/UserModel');
-const Vehicle = require('../model/VehicleModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); 
 
+const { ErrorResponse } = require('../middleware/ErrorHandle');
 const register = async (req, res, next) => {
     const { name, email, phone, userType, password, confirmPassword } = req.body;
-
+   console.log(req.body)
+   console.log(email)
+   console.log(phone)
     if (!name || !email || !phone || !userType || !password || !confirmPassword) {
         return res.status(400).json({ message: 'All fields are required' });
     }
@@ -58,16 +60,14 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        const vehicle = await Vehicle.findOne({ mover_id: email });
-        const moverId = vehicle ? vehicle.mover_id : null;
-
+        // Create a JWT token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.status(200).json({
             success: true,
             message: 'Login successful',
-            data: { ...user._doc, moverId },
-            token,
+            data: user,
+            token, // Send the token back in the response
         });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });

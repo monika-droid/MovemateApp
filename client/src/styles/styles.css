@@ -531,8 +531,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 900px;
-  height: 600px;
+  width: 70%;
+  height: 680px;
   display: flex;
   border-radius: 15px;
   overflow: hidden;
@@ -560,7 +560,7 @@ body {
 
 /* Right Section - Form */
 .right-section {
-  width: 50%;
+  width: 60%;
   padding: 50px;
   display: flex;
   flex-direction: column;
@@ -572,40 +572,43 @@ body {
 form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
+/* Input Row Layout */
+.input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Input and Select Fields */
 input, select {
-  padding: 15px;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
+  width: 100%;
+  padding: 12px 15px;
   font-size: 16px;
-  background-color: white;
-  color: #666;
-  appearance: none;
-  transition: all 0.3s ease;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #555;
+  transition: border-color 0.3s ease;
+  background-color: #fff;
 }
 
-/* Placeholder Styling */
-input::placeholder, select {
-  color: #999;
-}
-
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z' fill='%23666'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 15px center;
-  background-size: 16px;
-}
-
-/* Focused Inputs */
 input:focus, select:focus {
   border-color: #4CAF50;
   outline: none;
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
 }
 
-/* Buttons */
+/* Error Message Styling */
+.error {
+  color: #D8000C;
+  font-size: 13px;
+  margin-top: -5px;
+  margin-left: 5px;
+}
+
+/* Button Styling */
 button {
   padding: 15px;
   border: none;
@@ -621,11 +624,12 @@ button:hover {
   background-color: #45a049;
 }
 
-/* Links */
+/* Link Styling */
 .link {
   text-align: center;
   margin-top: 10px;
   color: #4CAF50;
+  font-size: 14px;
   cursor: pointer;
   transition: color 0.3s;
 }
@@ -633,14 +637,39 @@ button:hover {
 .link:hover {
   color: #388E3C;
 }
-
-/* Title Styles */
-h2 {
-  margin-bottom: 10px;
-  color: #333;
-  font-weight: 600;
-  text-align: center;
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  max-width: 300px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
