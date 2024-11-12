@@ -1,25 +1,25 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import HeroSection from '../components/HeroSection';
-import Services from '../components/Services';
-import SearchMovers from '../components/SearchMovers';
-import AboutUs from '../components/AboutUs';
-import Testimonials from '../components/Testimonials';
-import HowItWorks from '../components/HowItWorks';
+import Header from '../components/Header';
+import Hero from '../components/HeroSection';
+import About from '../components/AboutSection';
+import SearchBar from '../components/SearchMovers';
+import ChooseUsSection from '../components/ChooseUsSection';
+import ServiceAreas from '../components/ServiceAreas';
+import TaglineSection from '../components/TaglineSection';
 import Footer from '../components/Footer';
 import '../styles/styles.css';
 
 const CustomerHome = () => {
   return (
     <div>
-      <Navbar />
-      <HeroSection />
-      <Services />
-      <SearchMovers />
-      <AboutUs />
-      <Testimonials />
-      <HowItWorks />
-      <Footer userType="customer" />
+      <Header />
+      <Hero />
+      <About />
+      <SearchBar />
+      <ChooseUsSection />
+      <ServiceAreas />
+      <TaglineSection />
+      <Footer />
     </div>
   );
 };

@@ -20,7 +20,7 @@ const config = {
             }
           ],
         open: true,
-        port: 7000, // You can specify any port you prefer
+        port: 8000, // You can specify any port you prefer
         host: "0.0.0.0",
         historyApiFallback: { index: "index.html" },
     },
