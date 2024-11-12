@@ -136,7 +136,7 @@ body {
   rgba(255, 255, 255, 0.3) 60%,   /* More transparent towards the middle */
   rgba(255, 255, 255, 0.1) 80%,   /* Very faint white towards the right */
   rgba(255, 255, 255, 0) 100%     /* Fully transparent on the far right */
-),   url('/Users/anuj/Documents/GitHub/MovemateApp/client/public/images/box.jpeg'); /* Replace with actual image path */
+),   url('../../public/images/box.jpeg'); /* Replace with actual image path */
   background-size: cover;
   background-position: center;
   color: #fff;
@@ -358,7 +358,7 @@ body {
 .about-image {
   flex: 1;
   height: 30em; /* Set height as desired */
-  background-image: url('/Users/anuj/Desktop/Movemate/client/public/images/Slide-2.jpg'); /* Replace with actual image path */
+  background-image: url('../../public/images/Slide-2.jpg'); /* Replace with actual image path */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

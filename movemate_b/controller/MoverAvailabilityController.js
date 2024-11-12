@@ -35,10 +35,12 @@ const addAvailability = async (req, res) => {
 };
 
 const getAvailability = async (req, res) => {
+  console.log(req.params)
   const { moverId } = req.params;
   try {
     const availabilities = await MoverAvailability.find({ moverId });
     res.status(200).json(availabilities);
+    console.log(availabilities)
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve availability" });
   }

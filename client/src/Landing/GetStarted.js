@@ -1,9 +1,8 @@
 import React from 'react';
 import { Box, Grid, styled, Typography } from '@mui/material';
 import Title from './Title';
-// Images
-import imgDetail from '/Users/anuj/Documents/GitHub/MovemateApp/client/public/images/2.jpg';
-import imgDetail2 from '/Users/anuj/Documents/GitHub/MovemateApp/client/public/images/4.jpg';
+import imgDetail from '../../public/images/2.jpg';
+import imgDetail2 from '../../public/images/4.jpg';
 
 const GetStarted = () => {
 

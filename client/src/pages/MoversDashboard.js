@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TaglineSection from '../components/TaglineSection';
-import AvailabilityForm from '../components/AvailabilityForm'; // Ensure you have this component
+import AvailabilityForm from '../components/AvailabilityForm';
 import '../styles/styles.css';
 import apiService from '../Services/Services';
 import VehicleRegistrationForm from '../components/VehicleRegistration';
@@ -13,55 +13,41 @@ const MoversDashboard = () => {
   const { user, authToken } = useAuth();
   const [availability, setAvailability] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [vehicleId, setVehicleId] = useState(false);
+  const [vehicleId, setVehicleId] = useState(null);
   const [rideRequests, setRideRequests] = useState([]);
-
-  useEffect(() => {
-    const fetchMoverDetails = async () => {
-      try {
-        const response = await apiService.get(`/vehicleData/${user.email}`, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
-        setVehicleId(response.data || null);
-      } catch (error) {
-        console.error("Error fetching mover details:", error);
-      }
-    };
   const [editingIndex, setEditingIndex] = useState(null);
   const [error, setError] = useState();
 
-    if (user) fetchMoverDetails();
+  useEffect(() => {
+    const fetchMoverData = async () => {
+      if (!user) return;
+
+      try {
+        const [vehicleResponse, availabilityResponse, rideRequestsResponse] = await Promise.all([
+          apiService.get(`/vehicleData/${user.email}`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+          }),
+          apiService.get(`/availability/${user.email}`),
+          apiService.get(`/moverRequests/${user.email}`)
+        ]);
+
+        setVehicleId(vehicleResponse.data || null);
+        console.log(vehicleId)
+        setAvailability(availabilityResponse.data || []);
+        setRideRequests(rideRequestsResponse.data || []);
+      } catch (error) {
+        console.error("Error fetching mover data:", error);
+        setError("Failed to fetch mover data.");
+      }
+    };
+
+    fetchMoverData();
   }, [user, authToken]);
-
-  useEffect(() => {
-    const fetchAvailability = async () => {
-      try {
-        const response = await apiService.get(`/availability/${user.moverId}`);
-        setAvailability(response);
-      } catch (error) {
-        console.error("Error fetching availability data:", error);
-      }
-    };
-
-    if (user && user.moverId) fetchAvailability();
-  }, [user]);
-
-  useEffect(() => {
-    const fetchRideRequests = async () => {
-      try {
-        const response = await apiService.get(`/moverRequests/${user.email}`);
-        setRideRequests(response);
-      } catch (error) {
-        console.error("Error fetching ride requests:", error);
-      }
-    };
-
-    if (user) fetchRideRequests();
-  }, [user]);
 
   const handleAddAvailability = () => setShowForm(true);
 
   const handleFormSubmit = async (data) => {
+    console.log(data)
     if (!data) {
       setShowForm(false);
       return;
@@ -72,11 +58,12 @@ const MoversDashboard = () => {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       setAvailability([...availability, data]);
-      setShowForm(false);
+      console.log(availability)
     } catch (error) {
       console.error("Error adding availability:", error);
+    } finally {
+      setShowForm(false); // Close form after submission
     }
-    setShowForm(false); // Close form after submission
   };
 
   const handleDelete = async (id) => {
@@ -103,39 +90,15 @@ const MoversDashboard = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchMoverDetails = async () => {
-      try {
-        const response = await apiService.get(`/vehicleData/${user.email}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        if (response.data !== 0) {
-          setVehicleId(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching mover details:", error);
-        setError("Failed to fetch mover details.");
-      }
-    };
-  
-    if (user) {
-      fetchMoverDetails();
-    }
-  }, [user, authToken]);
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header userType="mover" />
 
-      {/* Content section */}
       <div style={{ flex: 1 }}>
         <section className="banner-section">
           <img src="images/Slide-1.jpg" alt="Banner" className="banner-image" />
         </section>
 
-        {/* Conditional rendering for Vehicle Registration and Availability Table */}
         {!vehicleId ? (
           <VehicleRegistrationForm moverId={user.email} />
         ) : (
@@ -165,7 +128,7 @@ const MoversDashboard = () => {
                       <td>{item.pricePerKm}</td>
                       <td>
                         <button onClick={() => handleEdit(index)} className="edit-btn">Edit</button>
-                        <button onClick={() => handleDelete(index)} className="delete-btn">Delete</button>
+                        <button onClick={() => handleDelete(item._id)} className="delete-btn">Delete</button>
                       </td>
                     </tr>
                   ))}

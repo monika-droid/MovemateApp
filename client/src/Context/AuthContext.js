@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
         name: response.data.name, 
         userType: response.data.userType, 
         email: response.data.email,
-        moverId: response.data.moverId
+      //  moverId: response.data.moverId
       };
       setAuthToken(token);
       setUser(userData);

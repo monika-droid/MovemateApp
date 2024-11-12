@@ -13,6 +13,7 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
     province: '',
     city: '',
     pricePerKm: '',
+
   });
   const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState('');
@@ -78,7 +79,8 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedDate && formData.time && formData.province && formData.city && formData.pricePerKm) {
-      onSubmit({ ...formData, date: selectedDate.toISOString().split('T')[0], moverId: user.moverId });
+      onSubmit({ ...formData, date: selectedDate.toISOString().split('T')[0], moverId: user.email });
+      console.log({ ...formData, date: selectedDate.toISOString().split('T')[0], moverId: user.email })
     } else {
       alert('Please fill out all fields.');
     }

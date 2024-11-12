@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, styled, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
 // Image
-import headerImg from '/Users/anuj/Documents/GitHub/MovemateApp/client/public/images/image.png';
+import headerImg from '../../public/images/image.png';
 import { borderRadius } from '@mui/system';
 
 const Header = () => {
