@@ -187,7 +187,7 @@ const Register = () => {
           <button type="submit">Register</button>
         </form>
 
-        <NavLink to="/" className="link">
+        <NavLink to="/login" className="link">
           Already Have Account? Login
         </NavLink>
 
