@@ -1,12 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiService from '../Services/Services'; 
+import apiService from '../Services/Services';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-
   const [authToken, setAuthToken] = useState(() => localStorage.getItem('authToken') || null);
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('user');
@@ -17,7 +16,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await apiService.post('/login', loginData);
       const token = response.token;
-      const userData = { id: response.data._id, name: response.data.name, userType: response.data.userType, email:response.data.email };
+      const userData = { 
+        id: response.data._id, 
+        name: response.data.name, 
+        userType: response.data.userType, 
+        email: response.data.email,
+        moverId: response.data.moverId
+      };
       setAuthToken(token);
       setUser(userData);
       localStorage.setItem('authToken', token);
@@ -28,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
- 
+
   const logout = () => {
     setAuthToken(null);
     setUser(null);
@@ -57,4 +62,3 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => React.useContext(AuthContext);
-

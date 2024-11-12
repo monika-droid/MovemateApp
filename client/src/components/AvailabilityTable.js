@@ -3,7 +3,7 @@ import AvailabilityForm from "./AvailabilityForm";
 
 const AvailabilityTable = ({ moverId }) => {
   const [availabilityData, setAvailabilityData] = useState([]);
-  const [editingData, setEditingData] = useState(null); // Track the item being edited
+  const [editingData, setEditingData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,7 +15,6 @@ const AvailabilityTable = ({ moverId }) => {
         alert("Failed to load availability data");
       }
     };
-
     fetchData();
   }, [moverId]);
 
@@ -29,7 +28,7 @@ const AvailabilityTable = ({ moverId }) => {
   };
 
   const handleEdit = (availability) => {
-    setEditingData(availability); // Set the item to be edited
+    setEditingData(availability);
   };
 
   const handleUpdate = async (updatedData) => {
@@ -38,13 +37,11 @@ const AvailabilityTable = ({ moverId }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedData),
     });
-
     if (response.ok) {
-      // Update the availabilityData state
       setAvailabilityData((prevData) =>
         prevData.map((item) => (item._id === updatedData._id ? updatedData : item))
       );
-      setEditingData(null); // Close the edit form
+      setEditingData(null);
     } else {
       alert("Failed to update availability");
     }
@@ -56,10 +53,10 @@ const AvailabilityTable = ({ moverId }) => {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Day</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Location</th>
+            <th>Province</th>
+            <th>City</th>
             <th>Price per Km</th>
             <th>Actions</th>
           </tr>
@@ -67,10 +64,9 @@ const AvailabilityTable = ({ moverId }) => {
         <tbody>
           {availabilityData.map((availability) => (
             <tr key={availability._id}>
-              <td>{availability.day}</td>
               <td>{new Date(availability.date).toLocaleDateString()}</td>
               <td>{availability.time}</td>
-              <td>{`${availability.location.city}, ${availability.location.province}`}</td>
+              <td>{`${availability.city}, ${availability.province}`}</td>
               <td>{availability.pricePerKm}</td>
               <td>
                 <button onClick={() => handleEdit(availability)}>Edit</button>
@@ -80,8 +76,6 @@ const AvailabilityTable = ({ moverId }) => {
           ))}
         </tbody>
       </table>
-
-      {/* Render the AvailabilityForm for editing if editingData is set */}
       {editingData && (
         <AvailabilityForm
           onClose={() => setEditingData(null)}

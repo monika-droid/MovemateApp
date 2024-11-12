@@ -3,10 +3,11 @@ import '../styles/styles.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import { useAuth } from '../Context/AuthContext';
 
 const AvailabilityForm = ({ onSubmit, initialData }) => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
-    day: '',
     date: '',
     time: '',
     province: '',
@@ -20,12 +21,8 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const apiKey = 'NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA==';
+  const headers = { 'X-CSCAPI-KEY': apiKey };
 
-  const headers = {
-    'X-CSCAPI-KEY': apiKey,
-  };
-
-  // Fetch provinces
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
@@ -38,11 +35,9 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
         console.error('Error fetching provinces:', error);
       }
     };
-
     fetchProvinces();
   }, []);
 
-  // Fetch cities based on selected province
   useEffect(() => {
     if (selectedProvince) {
       const fetchCities = async () => {
@@ -56,21 +51,19 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
           console.error('Error fetching cities:', error);
         }
       };
-
       fetchCities();
     } else {
       setCities([]);
     }
   }, [selectedProvince]);
 
-  // Update form state when initialData changes
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
       setSelectedProvince(initialData.province);
       setSelectedCity(initialData.city);
       const dateObject = new Date(initialData.date);
-      if (!isNaN(dateObject.getTime())) { // Check if date is valid
+      if (!isNaN(dateObject.getTime())) {
         setSelectedDate(dateObject);
       } else {
         console.error('Invalid date format:', initialData.date);
@@ -84,9 +77,8 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (formData.day && selectedDate && formData.time && formData.province && formData.city && formData.pricePerKm) {
-      onSubmit({ ...formData, date: selectedDate.toISOString().split('T')[0] }); // Format date
+    if (selectedDate && formData.time && formData.province && formData.city && formData.pricePerKm) {
+      onSubmit({ ...formData, date: selectedDate.toISOString().split('T')[0], moverId: user.moverId });
     } else {
       alert('Please fill out all fields.');
     }
@@ -98,28 +90,11 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
         <h3>Add Availability</h3>
         <form onSubmit={handleSubmit}>
           <select
-            name="day"
-            value={formData.day}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Day</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-          </select>
-
-          {/* Province Dropdown */}
-          <select
             value={selectedProvince}
             onChange={(e) => {
               setSelectedProvince(e.target.value);
               setFormData({ ...formData, province: e.target.value });
-              setSelectedCity(''); // Reset city when province changes
+              setSelectedCity('');
             }}
             required
           >
@@ -130,8 +105,6 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
               </option>
             ))}
           </select>
-
-          {/* City Dropdown */}
           <select
             value={selectedCity}
             onChange={(e) => {
@@ -148,8 +121,6 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
               </option>
             ))}
           </select>
-
-          {/* Date Picker */}
           <DatePicker
             selected={selectedDate}
             onChange={(date) => {
@@ -159,8 +130,6 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
             placeholderText="Select a date"
             required
           />
-
-          {/* Time Input */}
           <input
             type="time"
             name="time"
@@ -168,8 +137,6 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
             onChange={handleChange}
             required
           />
-
-          {/* Price Per KM Input */}
           <input
             type="number"
             name="pricePerKm"
@@ -178,7 +145,6 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
             onChange={handleChange}
             required
           />
-
           <button type="submit">Save</button>
           <button type="button" onClick={() => onSubmit(null)}>Close</button>
         </form>
