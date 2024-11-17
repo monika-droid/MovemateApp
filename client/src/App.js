@@ -7,7 +7,10 @@ import Register from './pages/Register';
 import CustomerHome from './pages/CustomerHome';
 import MoversDashboard from './pages/MoversDashboard';
 import { AuthProvider } from './Context/AuthContext';
+import  RideRequestsSection  from './pages/RideRequestsSection';
+import ConfirmedRide from './pages/ConfirmedRide';
 function App() {
+  
   return (
     <AuthProvider>
       <Routes>
@@ -20,10 +23,11 @@ function App() {
            
               <CustomerHome />          }
         />
-        <Route
-          path="/mover"
-          element={ <MoversDashboard /> }
-        />
+        <Route path="/mover" element={<MoversDashboard />}>
+        <Route path="requested-rides" element={<RideRequestsSection/>} />
+        <Route path="confirmed-rides" element={<ConfirmedRide/>} />
+
+        </Route>
       </Routes>
       </AuthProvider>
   );

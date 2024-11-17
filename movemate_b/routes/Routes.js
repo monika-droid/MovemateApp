@@ -21,12 +21,12 @@ router.post("/vehicle", uploadMiddleware.single("vehicle_image"), addVehicle);
 router.get("/vehicleData/:email", getVehiclesByEmail);
 router.post("/availability", addAvailability);
 router.get("/availability/:moverId", getAvailability);
-router.put("/availability/:id", updateAvailability);
+router.post("/availability/:id", updateAvailability);
 router.delete("/availability/:id", deleteAvailability);
 router.get('/searchMovers', searchMoversByDateAndLocation);
 
 router.post('/rideRequest', requestRide);
-router.put('/rideRequest/:id/status', updateRideStatus);
+router.post('/rideRequest/:id/status', updateRideStatus);
 router.get('/moverRequests/:moverId', getMoverRequests);
 router.get('/userRequests/:userId', getUserRequests);
 // router.get('/userBookings/:userId', getUserBookings);
