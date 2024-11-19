@@ -4,8 +4,10 @@ import { FaUserCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import '../styles/styles.css';
 import { NavLink } from "react-router-dom";
+import { useAuth } from '../Context/AuthContext';
 
 function Header({ userType }) {
+  const { user, authToken, logout } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);

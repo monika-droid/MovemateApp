@@ -1304,3 +1304,8 @@ button:hover {
 .reject-btn:hover {
   background-color: #e53935;
 }
+
+.Confirmedbookings{
+  display: flex;
+  justify-content: space-around;
+}

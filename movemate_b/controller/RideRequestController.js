@@ -73,7 +73,6 @@ const getUserBookings = async (req, res) => {
 
 const getMoverAppointments = async (req, res) => {
   const { moverId } = req.params;
-
   try {
     const appointments = await RideRequest.find({ moverId });
     res.status(200).json(appointments);
