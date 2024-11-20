@@ -1,15 +1,15 @@
 // src/components/Header.js
 import React, { useState } from 'react';
-import { useAuth } from '../Context/AuthContext';
 import { FaUserCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import '../styles/styles.css';
+import { NavLink } from "react-router-dom";
+import { useAuth } from '../Context/AuthContext';
 
 function Header({ userType }) {
-  const { user, logout } = useAuth(); // Get user and logout function from Auth context
+  const { user, authToken, logout } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
   const toggleProfileDropdown = () => setProfileDropdownOpen(!profileDropdownOpen);
 
@@ -52,8 +52,24 @@ function Header({ userType }) {
         {/* Conditional Links for MoverDashboard and CustomerHome */}
         {userType === 'mover' ? (
           <>
-            <Link to="/upcoming-rides">Upcoming Rides</Link>
-            <Link to="/my-bookings">My Bookings</Link>
+           <NavLink
+            to="/mover"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Availability
+          </NavLink>
+          <NavLink
+            to="/mover/requested-rides"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Requested Rides
+          </NavLink>
+          <NavLink
+            to="/mover/confirmed-rides"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Confirmed Rides
+          </NavLink>
           </>
         ) : (
           <>
