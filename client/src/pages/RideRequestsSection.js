@@ -15,7 +15,7 @@ const RideRequestsSection = () => {
         });
         setRideRequests(Array.isArray(response) ? response : []);
       } catch (error) {
-        console.error("Error fetching ride requests:", error);
+        console.error('Error fetching ride requests:', error);
       }
     };
 
@@ -31,42 +31,43 @@ const RideRequestsSection = () => {
         )
       );
     } catch (error) {
-      console.error("Error updating ride request status:", error);
+      console.error('Error updating ride request status:', error);
     }
   };
 
   return (
     <section className="ride-requests-section">
-      <h2>Ride Requests</h2>
-      <div className="card-container">
+      <h2 className="ride-requests-title">Ride Requests</h2>
+      <div className="ride-requests-container">
         {rideRequests.length === 0 ? (
-          <p>No ride requests</p>
+          <p className="no-requests-message">No ride requests available</p>
         ) : (
           rideRequests.map((request) => (
-            <div className="card" key={request._id}>
-              <div className="card-content">
+            <div className="ride-request-card" key={request._id}>
+              <div className="ride-request-details">
                 <p><strong>User:</strong> {request.userId}</p>
                 <p><strong>Date:</strong> {new Date(request.date).toLocaleDateString()}</p>
                 <p><strong>Time:</strong> {request.time}</p>
                 <p><strong>Status:</strong> {request.status}</p>
-                {request.status === 'pending' && (
-                  <div className="card-buttons">
-                    <button
-                      className="confirm-btn"
-                      onClick={() => handleRideRequestUpdate(request._id, 'confirmed')}
-                    >
-                      Confirm
-                    </button>
-                    <button
-                      className="reject-btn"
-                      onClick={() => handleRideRequestUpdate(request._id, 'rejected')}
-                    >
-                      Reject
-                    </button>
-                  </div>
-                )}
               </div>
+              {request.status === 'pending' && (
+                <>
+                  <button
+                    className="confirm-btn"
+                    onClick={() => handleRideRequestUpdate(request._id, 'confirmed')}
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    className="reject-btn"
+                    onClick={() => handleRideRequestUpdate(request._id, 'rejected')}
+                  >
+                    Reject
+                  </button>
+                </>
+              )}
             </div>
+
           ))
         )}
       </div>

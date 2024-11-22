@@ -1,16 +1,15 @@
-// src/components/Header.js
 import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/styles.css';
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 
-function Header({ userType }) {
-  const { user, authToken, logout } = useAuth();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+function Header({ userType, onNavigate }) {
+  const { user, logout } = useAuth();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const navigate = useNavigate();
+
   const toggleProfileDropdown = () => setProfileDropdownOpen(!profileDropdownOpen);
 
   const handleLogout = () => {
@@ -18,76 +17,58 @@ function Header({ userType }) {
     setProfileDropdownOpen(false);
   };
 
+  const handleLogoClick = () => {
+    if (userType === 'mover') {
+      navigate('/mover'); // Redirect to mover home page
+    } else {
+      navigate('/user'); // Redirect to user home page
+    }
+  };
+
   return (
     <header className="header">
-      <div className="header-logo">
-        <img src="/path/to/logo.png" alt="Logo" /> {/* Replace with actual logo path */}
+      <div className="header-logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+        <img src="/images/Logo.png" alt="Logo" /> {/* Replace with actual logo path */}
       </div>
 
-      {/* Conditional Navigation Links */}
       <nav className="header-nav">
-        {/* Only show these links if userType is not 'mover' */}
         {userType !== 'mover' && (
           <>
-            <Link to="/">Home</Link>
-            <Link to="/about">About Us</Link>
-
-            <div
-              className="dropdown-container"
-              onMouseEnter={toggleDropdown}
-              onMouseLeave={toggleDropdown}
-            >
-              <Link to="" className="dropdown-toggle">Services</Link>
-              {dropdownOpen && (
-                <div className="dropdown-menu">
-                  <Link to="/moving-services">Moving Services</Link>
-                  <Link to="/packing-services">Packing Services</Link>
-                  <Link to="/delivery-services">Delivery Services</Link>
-                </div>
-              )}
-            </div>
+            <Link to="#" onClick={() => onNavigate('about')}>About Us</Link>
+            <NavLink to="/getquotation" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+              Get Quotation
+            </NavLink>
           </>
         )}
-
-        {/* Conditional Links for MoverDashboard and CustomerHome */}
         {userType === 'mover' ? (
           <>
-           <NavLink
-            to="/mover"
-            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-          >
-            Availability
-          </NavLink>
-          <NavLink
-            to="/mover/requested-rides"
-            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-          >
-            Requested Rides
-          </NavLink>
-          <NavLink
-            to="/mover/confirmed-rides"
-            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-          >
-            Confirmed Rides
-          </NavLink>
+            <NavLink to="/mover" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+              Availability
+            </NavLink>
+            <NavLink to="/mover/requested-rides" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+              Requested Rides
+            </NavLink>
+            <NavLink to="/mover/confirmed-rides" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+              Confirmed Rides
+            </NavLink>
           </>
         ) : (
           <>
-            <Link to="/locations">Locations</Link>
             <Link to="/my-reservation">My Reservation</Link>
+            <Link to="#" onClick={() => onNavigate('chooseUs')}>Our Services</Link>
           </>
         )}
-
-        <Link to="/contact">Contact Us</Link>
       </nav>
 
       <div className="header-actions">
-        {/* Only show the "Book a Move" button if userType is not 'mover' */}
         {userType !== 'mover' && (
-          <Link to="/book-move" className="booking-button">Book a Move</Link>
+          <button
+            className="booking-button"
+            onClick={() => onNavigate('searchMovers')}
+          >
+            Book a Move
+          </button>
         )}
-
-        {/* Profile Section with Conditional Dropdown */}
         <div className="profile-section" onClick={toggleProfileDropdown}>
           <FaUserCircle className="profile-icon" />
           {profileDropdownOpen && (

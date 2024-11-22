@@ -1,5 +1,7 @@
 import React from 'react';
 import { Box, Grid, styled, Typography } from '@mui/material';
+import { motion } from 'framer-motion';
+import { Element } from 'react-scroll'; // For scrollable element
 import Title from './Title';
 import imgDetail from '../../public/images/2.jpg';
 import imgDetail2 from '../../public/images/4.jpg';
@@ -20,91 +22,137 @@ const GetStarted = () => {
         marginTop: '1.5rem',
     });
 
+    // Animation Variants
+    const fadeLeft = {
+        hidden: { opacity: 0, x: -50 },
+        visible: { opacity: 1, x: 0 },
+    };
+
+    const fadeRight = {
+        hidden: { opacity: 0, x: 50 },
+        visible: { opacity: 1, x: 0 },
+    };
+
     return (
-        <Grid 
-            container 
-            spacing={{ xs: 4, sm: 4, md: 0 }}
-            sx={{
-                py: 10,
-                px: 2,
-            }}
-        >
-            <CustomGridItem 
-                item 
-                xs={12} 
-                sm={8} 
-                md={6} 
-                component='section'
-            >
-                <Box 
-                    component='article'
-                    sx={{
-                        px: 4,
-                    }}
-                >
-                    <Title
-                        text='We make it easy for tenants and landlords'
-                        textAlign='start'
-                    />
-                    <CustomTypography>
-                        Listings are updated continuously so you won't miss out on homes that just hit the market until you find your perfect home.
-                    </CustomTypography> 
-                </Box>
-            </CustomGridItem>
-            
-            <Grid item xs={12} sm={4} md={6}>
-                <img 
-                    src={imgDetail} 
-                    alt="Detail" 
-                    style={{
-                        width: '100%',
-                    }}
-                />
-            </Grid>
-
+        // Wrapping with Element for scrolling
+        <Element name="get-started-section">
             <Grid 
-                item 
-                xs={12} 
-                sm={4} 
-                md={6}
+                container 
+                spacing={{ xs: 4, sm: 4, md: 0 }}
                 sx={{
-                    order: { xs: 4, sm: 4, md: 3 },
+                    py: 10,
+                    px: 2,
                 }}
             >
-                <img 
-                    src={imgDetail2} 
-                    alt="Detail 2" 
-                    style={{ 
-                        width: "100%",
-                    }}
-                />
-            </Grid>
+                {/* Fade Left Animation */}
+                <CustomGridItem 
+                    item 
+                    xs={12} 
+                    sm={8} 
+                    md={6} 
+                    component={motion.section}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.8 }}
+                    variants={fadeLeft}
+                >
+                    <Box 
+                        component='article'
+                        sx={{
+                            px: 4,
+                        }}
+                    >
+                        <Title
+                            text='Seamless Moving, One Tap Away'
+                            textAlign='start'
+                        />
+                        <CustomTypography>
+                           With MOVEMATE, plan, book, and track your move all in one place. Say goodbye to moving hassles.
+                        </CustomTypography> 
+                    </Box>
+                </CustomGridItem>
+                
+                {/* Fade Right Animation */}
+                <Grid 
+                    item 
+                    xs={12} 
+                    sm={4} 
+                    md={6}
+                    component={motion.div}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.8 }}
+                    variants={fadeRight}
+                >
+                    <img 
+                        src={imgDetail} 
+                        alt="Detail" 
+                        style={{
+                            width: '100%',
+                        }}
+                    />
+                </Grid>
 
-            <CustomGridItem 
-                item 
-                xs={12} 
-                sm={8} 
-                md={6}
-                sx={{
-                    order: { xs: 3, sm: 3, md: 4 },
-                }}
-            >
-                <Box 
-                    component='article'
+                {/* Fade Left Animation */}
+                <Grid 
+                    item 
+                    xs={12} 
+                    sm={4} 
+                    md={6}
+                    component={motion.div}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.8 }}
+                    variants={fadeLeft}
                     sx={{
-                        px: 4,
+                        order: { xs: 4, sm: 4, md: 3 },
                     }}
                 >
-                    <Title
-                        text='Match with the best agent'
-                        textAlign='start'
+                    <img 
+                        src={imgDetail2} 
+                        alt="Detail 2" 
+                        style={{ 
+                            width: "100%",
+                        }}
                     />
-                    <CustomTypography>
-                        Our verified partner agents are local experts who earn an average of 4.8/5 stars from buyers and sellers.
-                    </CustomTypography>
-                </Box>
-            </CustomGridItem>
-        </Grid>
+                </Grid>
+
+                {/* Fade Right Animation */}
+                <CustomGridItem 
+                    item 
+                    xs={12} 
+                    sm={8} 
+                    md={6}
+                    component={motion.section}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.8 }}
+                    variants={fadeRight}
+                    sx={{
+                        order: { xs: 3, sm: 3, md: 4 },
+                    }}
+                >
+                    <Box 
+                        component='article'
+                        sx={{
+                            px: 4,
+                        }}
+                    >
+                        <Title
+                            text='Smart Moves Start Here'
+                            textAlign='start'
+                        />
+                        <CustomTypography>
+                        MOVEMATE redefines moving with simple scheduling, transparent pricing, and expert movers you can trust.
+                        </CustomTypography>
+                    </Box>
+                </CustomGridItem>
+            </Grid>
+        </Element>
     );
 }
 

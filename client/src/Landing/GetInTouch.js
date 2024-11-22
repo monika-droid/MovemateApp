@@ -17,11 +17,11 @@ const GetInTouch = () => {
             }}
         >
             <Title 
-                text='Contact us to buy property'
+                text='Contact us'
                 textAlign='center'
             />
             <Paragraph 
-                text='It is our commitment to ensure a professional and enjoyable new home buying experience for you. If you want to get a home to start living as a family in an area that you love, click the button below.'
+                text='It is our commitment to ensure a professional and enjoyable new home buying experience for you.'
                 maxWidth='sm'
                 mx={0}
                 textAlign='center'
@@ -40,9 +40,11 @@ const GetInTouch = () => {
         mt: 3, 
         mb: 2,
         borderRadius: 0,
+        border:'2px solid #002B5C',
         backgroundColor: '#14192d',
         "&:hover": {
-            backgroundColor: '#1e2a5a',
+            backgroundColor: '#fff',
+            color:'#000'
         }
     }}
 >

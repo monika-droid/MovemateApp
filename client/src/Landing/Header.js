@@ -13,7 +13,7 @@ const Header = () => {
         justifyContent: 'center',
         gap: theme.spacing(2),
         paddingTop: theme.spacing(10),
-        backgroundColor: 'orange',
+        backgroundColor: '#002B5C',
         minHeight:'100vh',
         [theme.breakpoints.down('md')]: {
             flexDirection: 'column',
@@ -47,7 +47,7 @@ const Header = () => {
                         color: '#fff',
                     }}
                 >
-                    We'll build the house of your dreams
+                    Moving made simple and seamless with MOVEMATE
                 </Typography>
 
                 <Typography
@@ -58,8 +58,7 @@ const Header = () => {
                         color: '#fff',
                     }}
                 >
-                    We have 9000+ reviews and our customers
-                    trust our properties and quality products.
+                    Your go-to place for fast, reliable, and affordable moving services. From packing to unpacking, MOVEMATE takes care of it all.
                 </Typography>
 
                     <Box>
@@ -73,15 +72,16 @@ const Header = () => {
                 py: 1,
                 fontSize: '0.9rem',
                 textTransform: 'capitalize',
-                borderRadius: 0,
-                borderColor: '#14192d',
+                border: '2px solid #ffffff',
+                borderRadius: '16px',
                 color: '#000',
                 backgroundColor: '#fff',
                 "&&:hover": {
-                    backgroundColor: "#343a55"
+                    backgroundColor: "#002B5C",
+                    color: "#fff"
                 },
                 "&&:focus": {
-                    backgroundColor: "#343a55"
+                    backgroundColor: "#002B5C"
                 }
             }}
         >

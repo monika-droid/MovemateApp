@@ -63,7 +63,7 @@
   .register-button {
     padding: 0.75rem 2rem;
     font-size: 1rem;
-    background-color: #ff6f00;
+    background-color: #fff;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -77,7 +77,7 @@
   }
   
   .register-button:hover {
-    background-color: #ff8f1a;
+    background-color: #002B5C;
   }
   
   .register-button svg {
@@ -90,7 +90,7 @@
     flex-wrap: wrap;
     justify-content: center;
     padding: 2rem 1rem;
-    background-color: #fff;
+    background-color: #002B5C;
   }
   
   .gallery-image {
@@ -178,4 +178,6 @@ align-items: center;
       font-size: 1rem;
     }
   }
+  
+
   

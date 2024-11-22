@@ -29,6 +29,11 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
     }
   };
 
+  const handleEdit = (index) => {
+    setEditingIndex(index);
+    setShowForm(true);
+  };
+
   const handleDelete = async (id) => {
     try {
       await apiService.delete(`/availability/${id}`, {
@@ -50,7 +55,6 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
           <table className="availability-table">
             <thead>
               <tr>
-                <th>Day</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Province</th>
@@ -62,14 +66,13 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
             <tbody>
               {availability.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.day}</td>
                   <td>{item.date}</td>
                   <td>{item.time}</td>
                   <td>{item.province}</td>
                   <td>{item.city}</td>
                   <td>{item.pricePerKm}</td>
                   <td>
-                    <button onClick={() => setEditingIndex(index)} className="edit-btn">Edit</button>
+                    <button onClick={() => handleEdit(item._id)} className="edit-btn">Edit</button>
                     <button onClick={() => handleDelete(item._id)} className="delete-btn">Delete</button>
                   </td>
                 </tr>

@@ -39,19 +39,19 @@ const ServiceAreas = () => {
         animate={contentControls}
         transition={{ duration: 0.8 }}
       >
-        <h2 className="service-areas-title">Los Angeles Moving Areas</h2>
+        <h2 className="service-areas-title">Ontario Moving Areas</h2>
         <p className="service-areas-description">
-          Pronto Moving & Delivery is proud to provide the top moving services in Los Angeles.
+        MOVEMATE is proud to provide top-rated moving services across Ontario.
         </p>
         <p className="service-areas-cities">
-          Cities our movers in LA have provided service to include:{" "}
-          <a href="#beverlyhills">Beverly Hills</a>, <a href="#pasadena">Pasadena</a>, <a href="#westhollywood">West Hollywood</a>, <a href="#ventura">Ventura</a>, <a href="#longbeach">Long Beach</a>, <a href="#burbank">Burbank</a>, <a href="#glendale">Glendale</a>, <a href="#culvercity">Culver City</a>, <a href="#torrance">Torrance</a>, <a href="#santaclarita">Santa Clarita</a>, <a href="#westcovina">West Covina</a>, <a href="#hermosabeach">Hermosa Beach</a>, <a href="#hiddenhills">Hidden Hills</a>, <a href="#westla">West Los Angeles</a>.
+        Our professional movers have assisted customers in cities such as Toronto, Mississauga, Brampton, Hamilton, Ottawa, London, Markham, Vaughan, Kitchener, Windsor, Barrie, Guelph, Oakville, Burlington, and many more.
+          
         </p>
         <p className="service-areas-description">
-          Our moving areas extend to the entire state of California. Call our movers today to receive an affordable long-distance or local rate from our Los Angeles moving company.
+        Whether you’re moving locally or need a long-distance move anywhere in Ontario, MOVEMATE has you covered. Contact us today to get an affordable and transparent rate for your next move. Let MOVEMATE take the stress out of your relocation!
         </p>
         <a href="tel:310-562-0608" className="service-areas-phone">
-          <FaPhoneAlt /> 310-562-0608
+          <FaPhoneAlt /> 123-456-7890
         </a>
       </motion.div>
 
@@ -63,7 +63,7 @@ const ServiceAreas = () => {
         transition={{ duration: 0.8 }}
       >
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.83543450861!2d-118.24368348468102!3d34.05223428060617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c7d6e0f54365%3A0xb0c7e1e59e808c76!2sLos%20Angeles%2C%20CA!5e0!3m2!1sen!2sus!4v1637893614124!5m2!1sen!2sus"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d92718.21993291784!2d-80.4763151!3d43.43043435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882bf48c03ee5105%3A0x9525f8e6df5f544b!2sKitchener%2C%20ON%2C%20Canada!5e0!3m2!1sen!2sus!4v1732246153712!5m2!1sen!2sus"
           width="100%"
           height="100%"
           allowFullScreen=""

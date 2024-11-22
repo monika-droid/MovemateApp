@@ -9,6 +9,7 @@ import MoversDashboard from './pages/MoversDashboard';
 import { AuthProvider } from './Context/AuthContext';
 import  RideRequestsSection  from './pages/RideRequestsSection';
 import ConfirmedRide from './pages/ConfirmedRide';
+import GetQuotation from './components/GetQuotation';
 function App() {
   
   return (
@@ -17,12 +18,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route
-          path="/user"
-          element={
-           
-              <CustomerHome />          }
-        />
+        <Route path="/user" element={<CustomerHome />}/>
+        <Route path="/getquotation" element={<GetQuotation />} />
         <Route path="/mover" element={<MoversDashboard />}>
         <Route path="requested-rides" element={<RideRequestsSection/>} />
         <Route path="confirmed-rides" element={<ConfirmedRide/>} />
