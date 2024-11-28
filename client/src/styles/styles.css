@@ -1895,91 +1895,198 @@ button:hover {
 
 
 
-/* Get Quotation Container */
-.get-quotation-container {
-  max-width: 900px;
-  margin: 6rem auto;
-  padding: 2rem;
-  background-color: #fdfdfd;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+/* General Layout */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.get-quotation-container h2 {
-  text-align: center;
-  font-size: 2rem;
-  color: #003399;
-  margin-bottom: 1rem;
+/* Prevent Overlap with Header */
+.quotation-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  margin-top: 80px; /* Matches header height */
+  background: linear-gradient(to bottom, #e6f0ff, #f9f9f9); /* Subtle gradient */
 }
 
-.quotation-description {
+/* Form Wrapper */
+.quotation-wrapper {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 700px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Header Styling */
+.quotation-header {
   text-align: center;
-  font-size: 1rem;
-  color: #555;
   margin-bottom: 2rem;
 }
 
+.quotation-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #00274d;
+  margin-bottom: 0.5rem;
+}
+
+.quotation-description {
+  font-size: 1.1rem;
+  color: #555555;
+  line-height: 1.6;
+}
+
 /* Form Styling */
-.get-quotation-form {
+.quotation-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.form-group{
+.quotation-form-group {
   display: flex;
   flex-direction: column;
 }
 
-.form-group label {
+.quotation-form-group label {
+  font-size: 1rem;
   font-weight: bold;
-  color: #333;
+  color: #333333;
   margin-bottom: 0.5rem;
 }
 
-.form-group input,
-.form-group textarea {
-  padding: 12px;
+.quotation-input,
+.quotation-textarea {
+  padding: 12px 14px;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border-radius: 8px;
-  width: 100%;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.form-group textarea {
+.quotation-input:focus,
+.quotation-textarea:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 6px rgba(0, 86, 179, 0.3);
+  outline: none;
+}
+
+.quotation-textarea {
   height: 120px;
-  resize: none;
+  resize: vertical;
 }
 
-.submit-btn {
+/* Submit Button */
+.quotation-submit {
   padding: 14px;
   font-size: 1rem;
   font-weight: bold;
-  color: white;
-  background-color: #003399;
+  color: #ffffff;
+  background: linear-gradient(to right, #0056b3, #003580);
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background 0.3s, transform 0.2s;
 }
 
-.submit-btn:hover {
-  background-color: #002266;
+.quotation-submit:hover {
+  background: linear-gradient(to right, #003580, #001d3d);
   transform: translateY(-3px);
 }
 
+/* Error Text */
+.error-text {
+  font-size: 0.875rem;
+  color: #d9534f;
+  margin-top: 0.5rem;
+}
+
 /* Responsive Design */
-@media (max-width: 768px) {
-  .get-quotation-container {
-    padding: 1.5rem;
+@media (max-width: 1024px) {
+  .quotation-wrapper {
+    padding: 2rem;
+    max-width: 90%;
   }
 
-  .get-quotation-container h2 {
+  .quotation-title {
+    font-size: 2rem;
+  }
+
+  .quotation-description {
+    font-size: 1rem;
+  }
+
+  .quotation-input,
+  .quotation-textarea {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .quotation-submit {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .quotation-wrapper {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  .quotation-title {
     font-size: 1.8rem;
   }
 
-  .submit-btn {
+  .quotation-description {
+    font-size: 0.95rem;
+  }
+
+  .quotation-input,
+  .quotation-textarea {
     font-size: 0.9rem;
-    padding: 12px;
+    padding: 10px;
+  }
+
+  .quotation-submit {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .quotation-wrapper {
+    padding: 1rem;
+  }
+
+  .quotation-title {
+    font-size: 1.5rem;
+  }
+
+  .quotation-description {
+    font-size: 0.85rem;
+  }
+
+  .quotation-input,
+  .quotation-textarea {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
+  .quotation-submit {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .error-text {
+    font-size: 0.8rem;
   }
 }
