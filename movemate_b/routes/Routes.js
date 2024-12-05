@@ -5,7 +5,7 @@ const { addVehicle, getVehiclesByEmail } = require("../controller/VehicleControl
 const { addAvailability, getAvailability, updateAvailability, deleteAvailability, searchMoversByDateAndLocation } = require("../controller/MoverAvailabilityController");
 const { requestRide, updateRideStatus, getMoverRequests, getUserRequests } = require("../controller/RideRequestController");
 const {  getMoverAppointments } = require("../controller/RideRequestController");
-
+const {getMoverDetails}= require("../controller/MoverDetails");
 const multer = require("multer");
 
 const router = express.Router();
@@ -31,5 +31,6 @@ router.get('/moverRequests/:moverId', getMoverRequests);
 router.get('/userRequests/:userId', getUserRequests);
 // router.get('/userBookings/:userId', getUserBookings);
 router.get('/moverAppointments/:moverId', getMoverAppointments);
+router.post('/getMoverDetails', getMoverDetails); // You can modify the endpoint as needed
 
 module.exports = router;

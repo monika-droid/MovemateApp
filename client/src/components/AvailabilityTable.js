@@ -32,6 +32,7 @@ const AvailabilityTable = ({ moverId }) => {
   };
 
   const handleUpdate = async (updatedData) => {
+    debugger
     const response = await fetch(`/api/availability/${updatedData._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

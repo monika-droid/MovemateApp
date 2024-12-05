@@ -41,16 +41,12 @@ const PaymentPage = () => {
     if (data) {
       const parsedData = JSON.parse(data);
       setPaymentData(parsedData);
-
-      const basePrice = parsedData.distance * parsedData.ride.pricePerKm;
+      console.log(parsedData)
+      const basePrice = parsedData.price;
       const tax = basePrice * 0.13;
       const total = basePrice + tax;
-
-      setCalculatedPrice({
-        basePrice: basePrice.toFixed(2),
-        tax: tax.toFixed(2),
-        total: total.toFixed(2),
-      });
+      console.log(basePrice , "BASE PRICE")
+     
     } else {
       alert("Payment details are missing.");
       navigate("/approved-rides");
@@ -94,7 +90,7 @@ const PaymentPage = () => {
     doc.text(`Pickup Location: ${paymentData.pickup}`, 20, 40);
     doc.text(`Dropoff Location: ${paymentData.dropoff}`, 20, 50);
     doc.text(`Distance: ${paymentData.distance.toFixed(2)} km`, 20, 60);
-    doc.text(`Base Price: $${calculatedPrice.basePrice}`, 20, 70);
+    doc.text(`Base Price: $${paymentData.price}`, 20, 70);
     doc.text(`Tax (13%): $${calculatedPrice.tax}`, 20, 80);
     doc.text(`Total Price: $${calculatedPrice.total}`, 20, 90);
     doc.text(`Billing Address:`, 20, 110);
