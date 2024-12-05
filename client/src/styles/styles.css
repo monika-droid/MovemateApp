@@ -10,6 +10,15 @@ body {
   color: #333;
   line-height: 1.6;
 }
+.ride-status.pending {
+  color: orange;
+}
+.ride-status.approved {
+  color: green;
+}
+.ride-status.rejected {
+  color: red;
+}
 
 .container {
   width: 100%;
@@ -1014,15 +1023,6 @@ body {
   }
 }
 
-
-
-
-
-
-
-
-
-
 /* Form Popup */
 .form-popup {
   position: absolute;
@@ -1892,9 +1892,6 @@ button:hover {
   }
 }
 
-
-
-
 /* General Layout */
 body {
   margin: 0;
@@ -2090,3 +2087,63 @@ body {
     font-size: 0.8rem;
   }
 }
+.login-register-container .button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.forgot-password {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px; 
+}
+
+.forgot-password-link {
+  text-decoration: none;
+  color: #1f67b9; 
+  font-weight: 400; 
+  font-size: 0.9rem;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+.password-input {
+  position: relative;
+  margin-bottom: 20px; 
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.new-member {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.new-member p {
+  font-weight: 400;
+  color: #555; 
+  font-size: 1rem;
+}
+
+.new-member .login-link {
+  color: #002b5c;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.new-member .login-link:hover {
+  text-decoration: underline; 
+}
+
+

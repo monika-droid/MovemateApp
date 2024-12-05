@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import AvailabilityForm from './AvailabilityForm';
 import apiService from '../Services/Services';
 import { useAuth } from '../Context/AuthContext';
-import { display } from '@mui/system';
 
 const AvailabilitySection = ({ availability, setAvailability }) => {
   const { authToken } = useAuth();
@@ -49,9 +48,8 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
     <section className="availability-section">
       <h2>My Availability</h2>
 
-      {/* Check if availability exists */}
       {availability.length > 0 ? (
-        <>
+        <div className="availability-container">
           <table className="availability-table">
             <thead>
               <tr>
@@ -72,27 +70,32 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
                   <td>{item.city}</td>
                   <td>{item.pricePerKm}</td>
                   <td>
-                    <button onClick={() => handleEdit(item._id)} className="edit-btn">Edit</button>
-                    <button onClick={() => handleDelete(item._id)} className="delete-btn">Delete</button>
+                    <button onClick={() => handleEdit(item._id)} className="edit-btn">
+                      Edit
+                    </button>
+                    <button onClick={() => handleDelete(item._id)} className="delete-btn">
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </>
+        </div>
       ) : (
-        <div style={{ textAlign: 'center', margin: '20px', fontSize: '1.2rem', color: '#555' }}>
+        <div className="no-availability-warning">
           No availability found. Please post your availability.
         </div>
       )}
 
-      {/* Add button visible always */}
-      <button className="add-btn" onClick={handleAddAvailability}>+</button>
+      <button className="add-btn" onClick={handleAddAvailability}>
+        +
+      </button>
 
       {showForm && (
-        <AvailabilityForm 
-          onSubmit={handleFormSubmit} 
-          initialData={editingIndex !== null ? availability[editingIndex] : {}} 
+        <AvailabilityForm
+          onSubmit={handleFormSubmit}
+          initialData={editingIndex !== null ? availability[editingIndex] : {}}
         />
       )}
     </section>

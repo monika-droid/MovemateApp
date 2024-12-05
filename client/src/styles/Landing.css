@@ -1,183 +1,187 @@
-/* src/styles/LandingPage.css */
-
 /* General Styling */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+@import 'swiper/swiper.min.css';
+
+
 * {
-    box-sizing: border-box;
-  }
-  
-  body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    scroll-behavior: smooth;
-  }
-  
-  /* Logo Section */
-  .logo-section {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-  }
-  
-  .logo-container {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2); /* Box shadow around the container */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .logo-image {
-    max-width: 300px;
-    max-height: 300px;
-  }
-  
-  /* Tagline Section */
-  .tagline-section {
-    text-align: center;
-    padding: 4rem 1rem;
-    background-color: #f4f4f4;
-    color: #333;
-  }
-  
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Logo Section */
+.logo-section {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #002B5C, #00aaff);
+}
+
+.logo-container {
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-image {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+/* Tagline Section */
+.tagline-section {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: #ffffff;
+  color: #444;
+}
+
+.tagline-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #002B5C;
+  margin-bottom: 1rem;
+}
+
+.tagline-subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.tagline-content {
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+.register-button {
+  padding: 0.75rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #002B5C;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.register-button:hover {
+  background-color: #00aaff;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.register-button svg {
+  margin-left: 0.5rem;
+}
+
+/* Image Gallery Section */
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: #f4f4f4;
+}
+
+.gallery-image {
+  width: 350px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin: 1.5rem;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.gallery-image:hover {
+  transform: scale(1.05);
+}
+
+/* Banner Section */
+.banner-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1rem;
+  background: linear-gradient(135deg, #00aaff, #002B5C);
+  color: #ffffff;
+  text-align: center;
+}
+
+.banner-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.banner-content {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.banner-button {
+  padding: 0.75rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #ffffff;
+  color: #002B5C;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.banner-button:hover {
+  background-color: #002B5C;
+  color: #ffffff;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .tagline-title {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 2rem;
   }
-  
-  .tagline-subtitle {
-    font-size: 1.5rem;
-    color: #555;
-    margin-bottom: 1rem;
-  }
-  
-  .tagline-content {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
-  }
-  
-  .register-button {
-    padding: 0.75rem 2rem;
+
+  .tagline-subtitle, .tagline-content {
     font-size: 1rem;
-    background-color: #fff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: inline-flex;
-    align-items: center;
-    width: 32%;
-    
-    justify-content: center;
   }
-  
-  .register-button:hover {
-    background-color: #002B5C;
-  }
-  
-  .register-button svg {
-    margin-left: 0.5rem;
-  }
-  
-  /* Image Gallery Section */
+
   .image-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 2rem 1rem;
-    background-color: #002B5C;
-  }
-  
-  .gallery-image {
-    
-    width: 400px;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin: 5em;
-  }
-  
-  
-  
-  /* Banner Section */
-  .banner-section {
-    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 4rem 1rem; 
-    background-size: cover;
-    background-position: center;
-    color: #000000;
-    
   }
-  
+
+  .gallery-image {
+    width: 90%;
+    height: auto;
+    max-width: 300px;
+  }
+
   .banner-title {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
   }
-  
+
   .banner-content {
     font-size: 1.25rem;
-    margin-bottom: 2rem;
   }
-  
-  .banner-button {
-    padding: 0.75rem 2rem;
-    font-size: 1rem;
-    background-color: #00aaff;
-    color: #000000;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 30%;
-justify-content: center;
-align-items: center;
-  }
-  
-  .banner-button:hover {
-    background-color: #00c0ff;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .tagline-title {
-      font-size: 2rem;
-    }
-    
-    .tagline-subtitle, .tagline-content {
-      font-size: 1rem;
-    }
-  
-    .image-gallery {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .gallery-image {
-      width: 80%;
-      max-width: 300px;
-      height: auto;
-    }
-  
-    .content-title {
-      font-size: 1.5rem;
-    }
-  
-    .banner-title {
-      font-size: 2rem;
-    }
-  
-    .banner-content {
-      font-size: 1rem;
-    }
-  }
-  
-
-  
+}

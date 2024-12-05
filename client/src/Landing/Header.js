@@ -3,7 +3,6 @@ import { Box, Button, styled, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
 // Image
 import headerImg from '../../public/images/image.png';
-import { borderRadius } from '@mui/system';
 
 const Header = () => {
 
@@ -14,13 +13,11 @@ const Header = () => {
         gap: theme.spacing(2),
         paddingTop: theme.spacing(10),
         backgroundColor: '#002B5C',
-        minHeight:'100vh',
+        minHeight: '100vh',
         [theme.breakpoints.down('md')]: {
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-
-            
         }
     }));
 
@@ -61,33 +58,33 @@ const Header = () => {
                     Your go-to place for fast, reliable, and affordable moving services. From packing to unpacking, MOVEMATE takes care of it all.
                 </Typography>
 
-                    <Box>
-        <Button
-            component={Link}
-            to='/register'  // Replace with your target route
-            variant='contained'
-            sx={{
-                mr: 2,
-                px: 4,
-                py: 1,
-                fontSize: '0.9rem',
-                textTransform: 'capitalize',
-                border: '2px solid #ffffff',
-                borderRadius: '16px',
-                color: '#000',
-                backgroundColor: '#fff',
-                "&&:hover": {
-                    backgroundColor: "#002B5C",
-                    color: "#fff"
-                },
-                "&&:focus": {
-                    backgroundColor: "#002B5C"
-                }
-            }}
-        >
-            Register Now
-        </Button>
-    </Box>
+                <Box>
+                    <Button
+                        component={Link}
+                        to='/register' // Replace with your target route
+                        variant='contained'
+                        sx={{
+                            mr: 2,
+                            px: 4,
+                            py: 1,
+                            fontSize: '0.9rem',
+                            textTransform: 'capitalize',
+                            border: '2px solid #ffffff',
+                            borderRadius: '16px',
+                            color: '#000',
+                            backgroundColor: '#fff',
+                            "&&:hover": {
+                                backgroundColor: "#002B5C",
+                                color: "#fff"
+                            },
+                            "&&:focus": {
+                                backgroundColor: "#002B5C"
+                            }
+                        }}
+                    >
+                        Register Now
+                    </Button>
+                </Box>
             </BoxText>
 
             <Box sx={theme => ({

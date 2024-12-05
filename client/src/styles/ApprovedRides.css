@@ -1,0 +1,106 @@
+/* Approved Rides Page CSS */
+
+/* General Section Styling */
+.approved-rides-section {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Styling */
+.approved-rides-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Table Styling */
+.approved-rides-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    text-align: left;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.approved-rides-table th,
+.approved-rides-table td {
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+}
+
+.approved-rides-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.approved-rides-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.approved-rides-table tr:hover {
+    background-color: #d9eaff;
+}
+
+/* Status Styling */
+.ride-status {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: capitalize;
+    text-align: center;
+    display: inline-block;
+}
+
+.ride-status.pending {
+    background-color: #ffecb3;
+    color: #ff9800;
+}
+
+.ride-status.approved {
+    background-color: #c8e6c9; /* Light green background */
+    color: #4caf50;           /* Green text color */
+}
+
+.ride-status.confirmed {
+    background-color: #c8e6c9; /* Light green background */
+    color: #4caf50;           /* Green text color */
+}
+
+
+.ride-status.rejected {
+    background-color: #ffcdd2;
+    color: #f44336;
+}
+
+/* Button Styling */
+.book-another-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.book-another-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Empty State Message */
+.no-requests-message {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #777;
+    margin-top: 20px;
+}

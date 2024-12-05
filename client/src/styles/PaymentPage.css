@@ -1,0 +1,148 @@
+/* Payment Page Section */
+.payment-page-section {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 80px auto 20px; /* Added top margin to avoid header overlap */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: left; /* Align text to the left for better readability */
+}
+
+/* Heading */
+.payment-page-section h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Payment Container */
+.payment-container {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+/* Address Container */
+.address-container {
+  display: flex;
+  flex: 2;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Address Sections */
+.billing-address,
+.shipping-address {
+  flex: 1;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.billing-address h3,
+.shipping-address h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+/* Input Fields */
+.billing-address input,
+.shipping-address input,
+.billing-address select,
+.shipping-address select {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Same Address Checkbox */
+.same-address-checkbox {
+  margin-top: 1rem;
+  text-align: left;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Order Details Section */
+.order-details {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-details h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.order-details p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Order Table */
+.order-details table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.order-details th,
+.order-details td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-details th {
+  font-weight: bold;
+}
+
+/* Download PDF Button */
+.download-pdf-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.download-pdf-btn:hover {
+  background-color: #388e3c;
+}
+
+/* Adjustments for Header Overlap */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  background-color: #002b5c; /* Adjust as per your header color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.payment-page-section {
+  margin-top: 120px; /* Added enough top margin to account for fixed header height */
+}

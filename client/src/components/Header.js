@@ -15,6 +15,7 @@ function Header({ userType, onNavigate }) {
   const handleLogout = () => {
     logout();
     setProfileDropdownOpen(false);
+    navigate('/login'); 
   };
 
   const handleLogoClick = () => {
@@ -38,6 +39,9 @@ function Header({ userType, onNavigate }) {
             <NavLink to="/getquotation" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
               Get Quotation
             </NavLink>
+            <Link to="/user/approved-rides">Approved Rides</Link> {/* New link for Approved Rides */}
+            <Link to="/my-reservation">My Reservation</Link>
+            <Link to="#" onClick={() => onNavigate('chooseUs')}>Our Services</Link>
           </>
         )}
         {userType === 'mover' ? (
@@ -52,12 +56,7 @@ function Header({ userType, onNavigate }) {
               Confirmed Rides
             </NavLink>
           </>
-        ) : (
-          <>
-            <Link to="/my-reservation">My Reservation</Link>
-            <Link to="#" onClick={() => onNavigate('chooseUs')}>Our Services</Link>
-          </>
-        )}
+        ) : null}
       </nav>
 
       <div className="header-actions">
