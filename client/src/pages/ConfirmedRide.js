@@ -6,6 +6,7 @@ import '../styles/styles.css';
 const ConfirmedRide = () => {
   const { user } = useAuth();
   const [appointments, setAppointments] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -13,6 +14,12 @@ const ConfirmedRide = () => {
         const response = await apiService.get(`/moverAppointments/${user.email}`);
         const confirmedRides = response.filter((ride) => ride.status === 'confirmed');
         setAppointments(confirmedRides);
+        if (confirmedRides.length === 0) {
+          setError('No confirmed appointments found.');
+        } else {
+          setError('');
+        }
+
       } catch (error) {
         console.error('Error fetching appointments:', error);
       }
@@ -22,7 +29,10 @@ const ConfirmedRide = () => {
 
   return (
     <div className="confirmed-rides-section">
-      <h2 className="confirmed-rides-title">My Appointments</h2>
+    <h2 className="confirmed-rides-title">My Appointments</h2>
+    {error ? (
+      <div className="error-message">{error}</div>
+    ) : (
       <div className="confirmed-rides-container">
         {appointments.map((appointment) => (
           <div className="confirmed-ride-card" key={appointment._id}>
@@ -36,7 +46,8 @@ const ConfirmedRide = () => {
           </div>
         ))}
       </div>
-    </div>
+    )}
+  </div>
   );
 };
 

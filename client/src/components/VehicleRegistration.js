@@ -1,26 +1,34 @@
+// src/components/VehicleRegistrationForm.js
 import React, { useState } from 'react';
-import Popup from './Popup'; // Import a Popup component
-import '../styles/styles.css'; // Import styles
+import apiService from '../Services/Services';  // Import your API service
+import { useNavigate } from 'react-router-dom';
+import Popup from './Popup';  // Import Popup component
 
 const VehicleRegistrationForm = ({ moverId }) => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     licence_number: '',
-    mover_id: moverId || '',
+    mover_id: moverId ? moverId : '',
     vehicle_type: '',
     space_capacity: '',
     passenger_capacity: '',
     price_per_km: '',
-    availability_status: '',
+    availability_status: '', // Default value
   });
+  const [errors, setErrors] = useState({});
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(null); // Success or error status
+  const [showPopup, setShowPopup] = useState(false); // Control popup visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setForm({
+      ...form,
+      [name]: value,
+    });
+    validateField(name, value);
   };
 
   const handleImageChange = (e) => {
@@ -31,24 +39,90 @@ const VehicleRegistrationForm = ({ moverId }) => {
     }
   };
 
-  const validateForm = () => {
-    return Object.values(form).every((value) => value !== '');
+  const validateField = (name, value) => {
+    let error = '';
+
+    if (!value) {
+      error = `${name.replace('_', ' ')} is required`;
+    } else if (name === 'space_capacity' || name === 'passenger_capacity' || name === 'price_per_km') {
+      if (isNaN(value) || value <= 0) {
+        error = `${name.replace('_', ' ')} must be a positive number`;
+      }
+    } else if (name === 'licence_number') {
+      const regex = /^[A-Z0-9]{1,3}\s?[A-Z0-9]{1,4}$/i; // Example Canadian license format
+      if (!regex.test(value)) {
+        error = 'Licence number must be in the format: ABC 1234';
+      }
+    } else if (name === 'availability_status' && !['true', 'false'].includes(value)) {
+      error = 'Please select availability status';
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+
+    return error === '';
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    const fields = [
+      'licence_number',
+      'mover_id',
+      'vehicle_type',
+      'space_capacity',
+      'passenger_capacity',
+      'price_per_km',
+      'availability_status',
+    ];
+    let isValid = true;
+    fields.forEach((field) => {
+      if (!validateField(field, form[field])) isValid = false;
+    });
+    return isValid;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      setMessage('Please fill all the fields correctly.');
+      setMessage('Please fill out all fields correctly.');
       setIsSuccess(false);
       setShowPopup(true);
       return;
     }
 
-    setMessage('Vehicle registered successfully!');
-    setIsSuccess(true);
-    setShowPopup(true);
-    setTimeout(() => setShowPopup(false), 3000);
+    const formData = new FormData();
+    for (const key in form) {
+      formData.append(key, form[key]);
+    }
+    if (image) formData.append('vehicle_image', image);
+
+    try {
+      const response = await apiService.postFormData('/vehicle', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Success: Show message, reload the page
+      setMessage(response.data.message || 'Vehicle registered successfully');
+      setIsSuccess(true);
+      setShowPopup(true);
+
+      // Reload page after a delay to allow the message to display
+      setTimeout(() => window.location.reload(), 2000); 
+    } catch (error) {
+      // Error: Show error message
+      setMessage(error.response?.data?.error || 'Failed to register vehicle');
+      setIsSuccess(false);
+      setShowPopup(true);
+    }
   };
+
+  const closePopup = () => {
+    setShowPopup(false);  // Close the popup
+  };
+
 
   return (
     <div className="vehicle-reg-container">
@@ -66,6 +140,7 @@ const VehicleRegistrationForm = ({ moverId }) => {
                 onChange={handleChange}
                 required
               />
+              {errors.licence_number && <span className="error">{errors.licence_number}</span>}
             </div>
             <div className="vehicle-reg-group">
               <label htmlFor="mover_id">Mover ID</label>
@@ -77,6 +152,8 @@ const VehicleRegistrationForm = ({ moverId }) => {
                 onChange={handleChange}
                 required
               />
+              {errors.mover_id && <span className="error">{errors.mover_id}</span>}
+
             </div>
           </div>
 
@@ -91,6 +168,7 @@ const VehicleRegistrationForm = ({ moverId }) => {
                 onChange={handleChange}
                 required
               />
+             {errors.vehicle_type && <span className="error">{errors.vehicle_type}</span>}
             </div>
             <div className="vehicle-reg-group">
               <label htmlFor="space_capacity">Space Capacity (cubic meters)</label>
@@ -102,6 +180,8 @@ const VehicleRegistrationForm = ({ moverId }) => {
                 onChange={handleChange}
                 required
               />
+            {errors.space_capacity && <span className="error">{errors.space_capacity}</span>}
+
             </div>
           </div>
 
@@ -116,6 +196,7 @@ const VehicleRegistrationForm = ({ moverId }) => {
                 onChange={handleChange}
                 required
               />
+             {errors.passenger_capacity && <span className="error">{errors.passenger_capacity}</span>}
             </div>
             <div className="vehicle-reg-group">
               <label htmlFor="price_per_km">Price per KM</label>
@@ -127,6 +208,8 @@ const VehicleRegistrationForm = ({ moverId }) => {
                 onChange={handleChange}
                 required
               />
+             {errors.price_per_km && <span className="error">{errors.price_per_km}</span>}
+
             </div>
           </div>
 
