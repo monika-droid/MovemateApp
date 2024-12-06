@@ -29,9 +29,6 @@ const CustomerHome = () => {
     <div>
       <Header onNavigate={scrollToSection} />
       <Hero />
-      <div ref={aboutSectionRef}>
-        <About />
-      </div>
       <div ref={searchMoversRef}>
         <SearchBar />
       </div>

@@ -14,7 +14,7 @@ import ApprovedRides from './pages/ApprovedRides';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import ProtectedRoute from './Context/ProtectedRoute';
 import PasswordReset from './pages/PasswordReset';
-
+import CustomerConfirmedRide from './pages/CustomerConfirmRide'
 function App() {
   return (
     <AuthProvider>
@@ -28,6 +28,7 @@ function App() {
           <Route path="/user/approved-rides" element={<ApprovedRides />} />
           <Route path="/getquotation" element={<GetQuotation />} />
           <Route path="/reset-password" element={<PasswordReset />} />
+          <Route path="/user/my-reservation" element ={<CustomerConfirmedRide/>} />
           <Route path="/mover" element={
             <ProtectedRoute requiredRole="Mover">
               <MoversDashboard />

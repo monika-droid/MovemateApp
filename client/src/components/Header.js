@@ -35,13 +35,11 @@ function Header({ userType, onNavigate }) {
       <nav className="header-nav">
         {userType !== 'mover' && (
           <>
-            <Link to="#" onClick={() => onNavigate('about')}>About Us</Link>
             <NavLink to="/getquotation" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
               Get Quotation
             </NavLink>
             <Link to="/user/approved-rides">Approved Rides</Link> {/* New link for Approved Rides */}
-            <Link to="/my-reservation">My Reservation</Link>
-            <Link to="#" onClick={() => onNavigate('chooseUs')}>Our Services</Link>
+            <Link to="/user/my-reservation">My Reservation</Link>
           </>
         )}
         {userType === 'mover' ? (
