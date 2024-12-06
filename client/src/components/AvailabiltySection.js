@@ -24,9 +24,7 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
 
     try {
       if (data._id) {
-        const response = await apiService.put(`/availability/${data._id}`, data, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        const response = await apiService.post(`/availability/${data._id}`, data);
         setAvailability((prev) =>
           prev.map((item) => (item._id === response.data._id ? response.data : item))
         );
