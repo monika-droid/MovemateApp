@@ -41,12 +41,10 @@ const PaymentPage = () => {
     if (data) {
       const parsedData = JSON.parse(data);
       setPaymentData(parsedData);
-      console.log(parsedData)
-      const basePrice = parsedData.price;
-      const tax = basePrice * 0.13;
-      const total = basePrice + tax;
-      console.log(basePrice , "BASE PRICE")
-     
+      const basePrice = parseFloat(parsedData.price);
+      const tax = parseFloat((basePrice * 0.13).toFixed(2));
+      const total = parseFloat((basePrice + tax).toFixed(2));
+      setCalculatedPrice({ basePrice, tax, total });
     } else {
       alert("Payment details are missing.");
       navigate("/approved-rides");
@@ -90,7 +88,7 @@ const PaymentPage = () => {
     doc.text(`Pickup Location: ${paymentData.pickup}`, 20, 40);
     doc.text(`Dropoff Location: ${paymentData.dropoff}`, 20, 50);
     doc.text(`Distance: ${paymentData.distance.toFixed(2)} km`, 20, 60);
-    doc.text(`Base Price: $${paymentData.price}`, 20, 70);
+    doc.text(`Base Price: $${calculatedPrice.basePrice}`, 20, 70);
     doc.text(`Tax (13%): $${calculatedPrice.tax}`, 20, 80);
     doc.text(`Total Price: $${calculatedPrice.total}`, 20, 90);
     doc.text(`Billing Address:`, 20, 110);
@@ -108,7 +106,7 @@ const PaymentPage = () => {
     doc.save(`Receipt_${paymentData.ride._id}.pdf`);
   };
 
-  const provinces = State.getStatesOfCountry("CA"); // Changed to Canada (CA)
+  const provinces = State.getStatesOfCountry("CA");
   const cities = billingAddress.province
     ? City.getCitiesOfState("CA", billingAddress.province)
     : [];
@@ -126,74 +124,210 @@ const PaymentPage = () => {
           <div className="address-container">
             <div className="billing-address">
               <h3>Billing Address</h3>
-              <input type="text" name="firstName" placeholder="First Name" value={billingAddress.firstName} onChange={(e) => handleAddressChange(e, "billing")} />
-              <input type="text" name="lastName" placeholder="Last Name" value={billingAddress.lastName} onChange={(e) => handleAddressChange(e, "billing")} />
-              <input type="email" name="email" placeholder="Email" value={billingAddress.email} onChange={(e) => handleAddressChange(e, "billing")} />
-              <input type="text" name="phone" placeholder="Phone" value={billingAddress.phone} onChange={(e) => handleAddressChange(e, "billing")} />
-              <input type="text" name="address" placeholder="Address" value={billingAddress.address} onChange={(e) => handleAddressChange(e, "billing")} />
-              <select name="province" value={billingAddress.province} onChange={(e) => handleAddressChange(e, "billing")}>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={billingAddress.firstName}
+                onChange={(e) => handleAddressChange(e, "billing")}
+              />
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={billingAddress.lastName}
+                onChange={(e) => handleAddressChange(e, "billing")}
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={billingAddress.email}
+                onChange={(e) => handleAddressChange(e, "billing")}
+              />
+              <input
+                type="text"
+                name="phone"
+                placeholder="Phone"
+                value={billingAddress.phone}
+                onChange={(e) => handleAddressChange(e, "billing")}
+              />
+              <input
+                type="text"
+                name="address"
+                placeholder="Address"
+                value={billingAddress.address}
+                onChange={(e) => handleAddressChange(e, "billing")}
+              />
+              <select
+                name="province"
+                value={billingAddress.province}
+                onChange={(e) => handleAddressChange(e, "billing")}
+              >
                 <option value="">Select a Province</option>
                 {provinces.map((province) => (
-                  <option key={province.isoCode} value={province.isoCode}>{province.name}</option>
+                  <option key={province.isoCode} value={province.isoCode}>
+                    {province.name}
+                  </option>
                 ))}
               </select>
-              <select name="city" value={billingAddress.city} onChange={(e) => handleAddressChange(e, "billing")}>
+              <select
+                name="city"
+                value={billingAddress.city}
+                onChange={(e) => handleAddressChange(e, "billing")}
+              >
                 <option value="">Select a City</option>
                 {cities.map((city) => (
-                  <option key={city.name} value={city.name}>{city.name}</option>
+                  <option key={city.name} value={city.name}>
+                    {city.name}
+                  </option>
                 ))}
               </select>
-              <input type="text" name="postalCode" placeholder="Postal Code" value={billingAddress.postalCode} onChange={(e) => handleAddressChange(e, "billing")} />
+              <input
+                type="text"
+                name="postalCode"
+                placeholder="Postal Code"
+                value={billingAddress.postalCode}
+                onChange={(e) => handleAddressChange(e, "billing")}
+              />
               <div className="same-address-checkbox">
                 <label>
-                  <input type="checkbox" checked={sameAsBilling} onChange={handleSameAsBillingToggle} />
+                  <input
+                    type="checkbox"
+                    checked={sameAsBilling}
+                    onChange={handleSameAsBillingToggle}
+                  />
                   Shipping address is the same as billing address
                 </label>
               </div>
             </div>
             <div className="shipping-address">
               <h3>Shipping Address</h3>
-              <input type="text" name="firstName" placeholder="First Name" value={shippingAddress.firstName} onChange={(e) => handleAddressChange(e, "shipping")} disabled={sameAsBilling} />
-              <input type="text" name="lastName" placeholder="Last Name" value={shippingAddress.lastName} onChange={(e) => handleAddressChange(e, "shipping")} disabled={sameAsBilling} />
-              <input type="email" name="email" placeholder="Email" value={shippingAddress.email} onChange={(e) => handleAddressChange(e, "shipping")} disabled={sameAsBilling} />
-              <input type="text" name="phone" placeholder="Phone" value={shippingAddress.phone} onChange={(e) => handleAddressChange(e, "shipping")} disabled={sameAsBilling} />
-              <input type="text" name="address" placeholder="Address" value={shippingAddress.address} onChange={(e) => handleAddressChange(e, "shipping")} disabled={sameAsBilling} />
-              <select name="province" value={shippingAddress.province} onChange={(e) => handleAddressChange(e, "shipping")} disabled={sameAsBilling}>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={shippingAddress.firstName}
+                onChange={(e) => handleAddressChange(e, "shipping")}
+                disabled={sameAsBilling}
+              />
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={shippingAddress.lastName}
+                onChange={(e) => handleAddressChange(e, "shipping")}
+                disabled={sameAsBilling}
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={shippingAddress.email}
+                onChange={(e) => handleAddressChange(e, "shipping")}
+                disabled={sameAsBilling}
+              />
+              <input
+                type="text"
+                name="phone"
+                placeholder="Phone"
+                value={shippingAddress.phone}
+                onChange={(e) => handleAddressChange(e, "shipping")}
+                disabled={sameAsBilling}
+              />
+              <input
+                type="text"
+                name="address"
+                placeholder="Address"
+                value={shippingAddress.address}
+                onChange={(e) => handleAddressChange(e, "shipping")}
+                disabled={sameAsBilling}
+              />
+              <select
+                name="province"
+                value={shippingAddress.province}
+                onChange={(e) => handleAddressChange(e, "shipping")}
+                disabled={sameAsBilling}
+              >
                 <option value="">Select a Province</option>
                 {provinces.map((province) => (
-                  <option key={province.isoCode} value={province.isoCode}>{province.name}</option>
+                  <option key={province.isoCode} value={province.isoCode}>
+                    {province.name}
+                  </option>
                 ))}
               </select>
-              <select name="city" value={shippingAddress.city} onChange={(e) => handleAddressChange(e, "shipping")} disabled={sameAsBilling}>
+              <select
+                name="city"
+                value={shippingAddress.city}
+                onChange={(e) => handleAddressChange(e, "shipping")}
+                disabled={sameAsBilling}
+              >
                 <option value="">Select a City</option>
                 {cities.map((city) => (
-                  <option key={city.name} value={city.name}>{city.name}</option>
+                  <option key={city.name} value={city.name}>
+                    {city.name}
+                  </option>
                 ))}
               </select>
-              <input type="text" name="postalCode" placeholder="Postal Code" value={shippingAddress.postalCode} onChange={(e) => handleAddressChange(e, "shipping")} disabled={sameAsBilling} />
+              <input
+                type="text"
+                name="postalCode"
+                placeholder="Postal Code"
+                value={shippingAddress.postalCode}
+                onChange={(e) => handleAddressChange(e, "shipping")}
+                disabled={sameAsBilling}
+              />
             </div>
           </div>
           <div className="order-details">
             <h3>Order Details</h3>
-            <p><strong>Pickup Location:</strong> {paymentData.pickup}</p>
-            <p><strong>Dropoff Location:</strong> {paymentData.dropoff}</p>
-            <p><strong>Distance:</strong> {paymentData.distance.toFixed(2)} km</p>
-            <p><strong>Base Price:</strong> ${calculatedPrice.basePrice}</p>
-            <p><strong>Tax (13%):</strong> ${calculatedPrice.tax}</p>
-            <p><strong>Total:</strong> ${calculatedPrice.total}</p>
+            <p>
+              <strong>Pickup Location:</strong> {paymentData.pickup}
+            </p>
+            <p>
+              <strong>Dropoff Location:</strong> {paymentData.dropoff}
+            </p>
+            <p>
+              <strong>Distance:</strong> {paymentData.distance.toFixed(2)} km
+            </p>
+            <p>
+              <strong>Base Price:</strong> ${calculatedPrice.basePrice}
+            </p>
+            <p>
+              <strong>Tax (13%):</strong> ${calculatedPrice.tax}
+            </p>
+            <p>
+              <strong>Total:</strong> ${calculatedPrice.total}
+            </p>
           </div>
         </div>
-        <button onClick={downloadPDF} className="download-pdf-btn">Download Receipt</button>
-        <PayPalScriptProvider options={{ "client-id": "AbgaAkmgJQttnf7-i6aJmEna8fELa8LuI9ieySIr1T5H8G61812V_mdC8MS5nM4NTYgALkqlS5_C7Gdo" }}>
+        <button onClick={downloadPDF} className="download-pdf-btn">
+          Download Receipt
+        </button>
+        <PayPalScriptProvider
+          options={{
+            "client-id":
+              "AbgaAkmgJQttnf7-i6aJmEna8fELa8LuI9ieySIr1T5H8G61812V_mdC8MS5nM4NTYgALkqlS5_C7Gdo",
+          }}
+        >
           <PayPalButtons
-            createOrder={(data, actions) => actions.order.create({
-              purchase_units: [{ amount: { value: calculatedPrice.total } }],
-            })}
-            onApprove={(data, actions) => actions.order.capture().then(handlePaymentSuccess)}
+            createOrder={(data, actions) =>
+              actions.order.create({
+                purchase_units: [{ amount: { value: calculatedPrice.total } }],
+              })
+            }
+            onApprove={(data, actions) =>
+              actions.order.capture().then(handlePaymentSuccess)
+            }
             onError={handlePaymentError}
           />
         </PayPalScriptProvider>
-        <button className="cancel-payment-btn" onClick={() => navigate("/user")}>Cancel</button>
+        <button
+          className="cancel-payment-btn"
+          onClick={() => navigate("/user")}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ const ApprovedRides = () => {
   const [autocompleteTo, setAutocompleteTo] = useState(null);
   const [distance, setDistance] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [price, setPrice] = useState()
+  const [price, setPrice] = useState();
   const [formData, setFormData] = useState({
     movingFrom: "",
     movingTo: "",
@@ -38,7 +38,6 @@ const ApprovedRides = () => {
     const fetchUserRequests = async () => {
       try {
         const response = await apiService.get(`/userRequests/${user.email}`);
-        console.log(response);
         const confirmedRides = response.filter((ride) => ride.status === "confirmed");
         if (confirmedRides.length === 0) {
           setError("No confirmed appointments found.");
@@ -64,8 +63,6 @@ const ApprovedRides = () => {
           [field === "from" ? "movingFrom" : "movingTo"]: place.formatted_address,
         });
       }
-    } else {
-      console.error(`Autocomplete is not initialized for ${field}`);
     }
   };
 
@@ -75,12 +72,11 @@ const ApprovedRides = () => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
     if (formData.movingFrom === formData.movingTo) {
-      newErrors.movingLocations = '"Moving From" and "Moving To" cannot be the same.';
-      return false
+      setError('"Moving From" and "Moving To" cannot be the same.');
+      return false;
     }
-    return true
+    return true;
   };
 
   const calculateDistance = async () => {
@@ -111,7 +107,7 @@ const ApprovedRides = () => {
 
   const handlePayNow = (ride, movingFrom, movingTo, price, distance) => {
     const paymentData = {
-      pickup:movingFrom,
+      pickup: movingFrom,
       dropoff: movingTo,
       distance: distance,
       price: price,
@@ -132,15 +128,16 @@ const ApprovedRides = () => {
     }
 
     try {
-      const moverData = {        
-          moverId, location, date, time
-      }
+      const moverData = {
+        moverId,
+        location,
+        date,
+        time,
+      };
       const moverDataresponse = await apiService.post(`/getMoverDetails`, moverData);
-      
-      console.log(moverDataresponse);
       const distanceInKm = await calculateDistance();
       const cost = (distanceInKm * moverDataresponse.pricePerKm).toFixed(2);
-      setPrice(cost)
+      setPrice(cost);
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -170,13 +167,26 @@ const ApprovedRides = () => {
             {rideRequests.map((ride) => (
               <div className="confirmed-ride-card" key={ride._id}>
                 <div className="confirmed-ride-content">
-                  <p><strong>Mover :</strong> {ride.moverId}</p>
-                  <p><strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}</p>
-                  <p><strong>Time:</strong> {ride.time}</p>
-                  <p><strong>Location:</strong> {ride.location}</p>
-                  <p><strong>Status:</strong> {ride.status}</p>
-                  <form className="quotation-form" onSubmit={(e) => handleSubmit(e, ride.moverId,ride.location,ride.date,ride.time )}>
-                  <div className="quotation-form-group">
+                  <p>
+                    <strong>Mover :</strong> {ride.moverId}
+                  </p>
+                  <p>
+                    <strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <strong>Time:</strong> {ride.time}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {ride.location}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {ride.status}
+                  </p>
+                  <form
+                    className="quotation-form"
+                    onSubmit={(e) => handleSubmit(e, ride.moverId, ride.location, ride.date, ride.time)}
+                  >
+                    <div className="quotation-form-group">
                       <label htmlFor="movingFrom">Moving From</label>
                       <Autocomplete
                         onLoad={(autocomplete) => setAutocompleteFrom(autocomplete)}
@@ -211,17 +221,24 @@ const ApprovedRides = () => {
                           required
                         />
                       </Autocomplete>
-                      {error.movingLocations && <p className="error-text">{error.movingLocations}</p>}
                     </div>
-                    
                     <button type="submit" className="quotation-submit" disabled={isSubmitting}>
-                      {isSubmitting ? "Generating..." : "GET FINAL PRICE"}  
+                      {isSubmitting
+                        ? "Generating..."
+                        : price && distance
+                        ? `Pay $${price} for ${distance} km`
+                        : "GET FINAL PRICE"}
                     </button>
-                    {price && distance &&  <p> Your Total amount  is {price}  as your travel distance is {distance} </p> &&
-                    <button className="pay-now-btn" onClick={ () => handlePayNow(ride, formData.movingFrom, formData.movingTo, price, distance) }>
-                    Pay Now
-                    </button>
-                    }
+                    {price && distance && (
+                      <button
+                        className="pay-now-btn"
+                        onClick={() =>
+                          handlePayNow(ride, formData.movingFrom, formData.movingTo, price, distance)
+                        }
+                      >
+                        Confirm Payment
+                      </button>
+                    )}
                   </form>
                 </div>
               </div>
