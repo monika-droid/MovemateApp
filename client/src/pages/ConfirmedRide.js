@@ -29,25 +29,25 @@ const ConfirmedRide = () => {
 
   return (
     <div className="confirmed-rides-section">
-    <h2 className="confirmed-rides-title">My Appointments</h2>
-    {error ? (
-      <div className="error-message">{error}</div>
-    ) : (
-      <div className="confirmed-rides-container">
-        {appointments.map((appointment) => (
-          <div className="confirmed-ride-card" key={appointment._id}>
-            <div className="confirmed-ride-content">
-              <p><strong>User:</strong> {appointment.userId}</p>
-              <p><strong>Date:</strong> {new Date(appointment.date).toLocaleDateString()}</p>
-              <p><strong>Time:</strong> {appointment.time}</p>
-              <p><strong>Location:</strong> {appointment.location}</p>
-              <p><strong>Status:</strong> {appointment.status}</p>
+      <h2 className="text-center mb-4" style={{ color: '#00274d', fontWeight: '700', fontSize: '1.8rem' }}>My Appointments</h2>
+      {error ? (
+        <div className="text-center text-muted">{error}</div>
+      ) : (
+        <div className="confirmed-rides-container d-flex flex-wrap gap-3 justify-content-center">
+          {appointments.map((appointment) => (
+            <div className="confirmed-ride-card shadow p-3 rounded" key={appointment._id} style={{ backgroundColor: '#ffffff', width: '300px' }}>
+              <div className="confirmed-ride-content">
+                <p><strong>User:</strong> {appointment.userId}</p>
+                <p><strong>Date:</strong> {new Date(appointment.date).toLocaleDateString()}</p>
+                <p><strong>Time:</strong> {appointment.time}</p>
+                <p><strong>Location:</strong> {appointment.location}</p>
+                <p><strong>Status:</strong> {appointment.status}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

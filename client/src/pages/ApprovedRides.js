@@ -10,7 +10,6 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyDNfZdDVW-G98BjDuOmOlEWmL74_J2eD6g";
 const libraries = ["places"];
 
 const ApprovedRides = () => {
-  
   const { user, authToken } = useAuth();
   const navigate = useNavigate();
   const [rideRequests, setRideRequests] = useState([]);
@@ -186,13 +185,13 @@ const ApprovedRides = () => {
     <>
       <Header userType="user" />
       <div className="confirmed-rides-section">
-        <h2 className="confirmed-rides-title">My Rides</h2>
+        <h2 className="text-center mb-4" style={{ color: '#00274d', fontWeight: '700', fontSize: '1.8rem' }}>My Rides</h2>
         {error ? (
-          <div className="error-message">{error}</div>
+          <div className="text-center text-muted">{error}</div>
         ) : (
-          <div className="confirmed-rides-container">
+          <div className="confirmed-rides-container d-flex flex-wrap gap-3 justify-content-center">
             {rideRequests.map((ride) => (
-              <div className="confirmed-ride-card" key={ride._id}>
+              <div className="confirmed-ride-card shadow p-3 rounded" key={ride._id} style={{ backgroundColor: '#ffffff', width: '350px' }}>
                 <div className="confirmed-ride-content">
                   <p><strong>Mover:</strong> {ride.moverId}</p>
                   <p><strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}</p>
@@ -210,15 +209,16 @@ const ApprovedRides = () => {
                           type="text"
                           id={`movingFrom-${ride._id}`}
                           name="movingFrom"
-                          className="quotation-input"
+                          className="form-control"
                           value={formData[ride._id]?.movingFrom || ""}
                           onChange={(e) => handleManualInput(e, ride._id)}
                           placeholder="Enter your current location"
                           required
+                          style={{ height: '45px', borderRadius: '5px' }}
                         />
                       </Autocomplete>
                     </div>
-                    <div className="quotation-form-group">
+                    <div className="quotation-form-group mt-3">
                       <label htmlFor={`movingTo-${ride._id}`}>Moving To</label>
                       <Autocomplete
                         onLoad={(instance) => handleAutocompleteLoad(instance, "to", ride._id)}
@@ -228,18 +228,20 @@ const ApprovedRides = () => {
                           type="text"
                           id={`movingTo-${ride._id}`}
                           name="movingTo"
-                          className="quotation-input"
+                          className="form-control"
                           value={formData[ride._id]?.movingTo || ""}
                           onChange={(e) => handleManualInput(e, ride._id)}
                           placeholder="Enter your destination"
                           required
+                          style={{ height: '45px', borderRadius: '5px' }}
                         />
                       </Autocomplete>
                     </div>
                     <button
                       type="submit"
-                      className="quotation-submit"
+                      className="btn mt-3"
                       disabled={isSubmitting}
+                      style={{ backgroundColor: '#00274d', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '5px', width: '100%' }}
                     >
                       {isSubmitting
                         ? "Generating..."
@@ -250,8 +252,9 @@ const ApprovedRides = () => {
                   </form>
                   {price[ride._id] && distance[ride._id] && (
                     <button
-                      className="pay-now-button"
+                      className="btn mt-3"
                       onClick={() => handlePayNow(ride, ride._id)}
+                      style={{ backgroundColor: '#e63946', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '5px', width: '100%' }}
                     >
                       Pay Now
                     </button>

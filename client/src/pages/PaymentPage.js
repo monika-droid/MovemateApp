@@ -144,14 +144,15 @@ const PaymentPage = () => {
     <div>
       <Header userType="user" />
       <div className="payment-page-section">
-        <h2>Complete Payment</h2>
-        <div className="payment-container">
-          <div className="address-container">
-            <div className="billing-address">
-              <h3>Billing Address</h3>
+        <h2 className="text-center mb-4" style={{ color: "#00274d", fontWeight: "700", fontSize: "1.8rem" }}>Complete Payment</h2>
+        <div className="payment-container d-flex flex-column gap-4">
+          <div className="address-container d-flex justify-content-between">
+            <div className="billing-address" style={{ flex: "1", marginRight: "20px" }}>
+              <h3 style={{ color: "#00274d" }}>Billing Address</h3>
               <input
                 type="text"
                 name="firstName"
+                className="form-control mb-3"
                 placeholder="First Name"
                 value={billingAddress.firstName}
                 onChange={(e) => handleAddressChange(e, "billing")}
@@ -159,6 +160,7 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="lastName"
+                className="form-control mb-3"
                 placeholder="Last Name"
                 value={billingAddress.lastName}
                 onChange={(e) => handleAddressChange(e, "billing")}
@@ -166,6 +168,7 @@ const PaymentPage = () => {
               <input
                 type="email"
                 name="email"
+                className="form-control mb-3"
                 placeholder="Email"
                 value={billingAddress.email}
                 onChange={(e) => handleAddressChange(e, "billing")}
@@ -173,6 +176,7 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="phone"
+                className="form-control mb-3"
                 placeholder="Phone"
                 value={billingAddress.phone}
                 onChange={(e) => handleAddressChange(e, "billing")}
@@ -180,12 +184,14 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="address"
+                className="form-control mb-3"
                 placeholder="Address"
                 value={billingAddress.address}
                 onChange={(e) => handleAddressChange(e, "billing")}
               />
               <select
                 name="province"
+                className="form-select mb-3"
                 value={billingAddress.province}
                 onChange={(e) => handleAddressChange(e, "billing")}
               >
@@ -198,6 +204,7 @@ const PaymentPage = () => {
               </select>
               <select
                 name="city"
+                className="form-select mb-3"
                 value={billingAddress.city}
                 onChange={(e) => handleAddressChange(e, "billing")}
               >
@@ -211,26 +218,27 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="postalCode"
+                className="form-control mb-3"
                 placeholder="Postal Code"
                 value={billingAddress.postalCode}
                 onChange={(e) => handleAddressChange(e, "billing")}
               />
-              <div className="same-address-checkbox">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={sameAsBilling}
-                    onChange={handleSameAsBillingToggle}
-                  />
-                  Shipping address is the same as billing address
-                </label>
+              <div className="form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  checked={sameAsBilling}
+                  onChange={handleSameAsBillingToggle}
+                />
+                <label className="form-check-label">Shipping address is the same as billing address</label>
               </div>
             </div>
-            <div className="shipping-address">
-              <h3>Shipping Address</h3>
+            <div className="shipping-address" style={{ flex: "1", marginLeft: "20px" }}>
+              <h3 style={{ color: "#00274d" }}>Shipping Address</h3>
               <input
                 type="text"
                 name="firstName"
+                className="form-control mb-3"
                 placeholder="First Name"
                 value={shippingAddress.firstName}
                 onChange={(e) => handleAddressChange(e, "shipping")}
@@ -239,6 +247,7 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="lastName"
+                className="form-control mb-3"
                 placeholder="Last Name"
                 value={shippingAddress.lastName}
                 onChange={(e) => handleAddressChange(e, "shipping")}
@@ -247,6 +256,7 @@ const PaymentPage = () => {
               <input
                 type="email"
                 name="email"
+                className="form-control mb-3"
                 placeholder="Email"
                 value={shippingAddress.email}
                 onChange={(e) => handleAddressChange(e, "shipping")}
@@ -255,6 +265,7 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="phone"
+                className="form-control mb-3"
                 placeholder="Phone"
                 value={shippingAddress.phone}
                 onChange={(e) => handleAddressChange(e, "shipping")}
@@ -263,6 +274,7 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="address"
+                className="form-control mb-3"
                 placeholder="Address"
                 value={shippingAddress.address}
                 onChange={(e) => handleAddressChange(e, "shipping")}
@@ -270,6 +282,7 @@ const PaymentPage = () => {
               />
               <select
                 name="province"
+                className="form-select mb-3"
                 value={shippingAddress.province}
                 onChange={(e) => handleAddressChange(e, "shipping")}
                 disabled={sameAsBilling}
@@ -283,6 +296,7 @@ const PaymentPage = () => {
               </select>
               <select
                 name="city"
+                className="form-select mb-3"
                 value={shippingAddress.city}
                 onChange={(e) => handleAddressChange(e, "shipping")}
                 disabled={sameAsBilling}
@@ -297,6 +311,7 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="postalCode"
+                className="form-control mb-3"
                 placeholder="Postal Code"
                 value={shippingAddress.postalCode}
                 onChange={(e) => handleAddressChange(e, "shipping")}
@@ -304,65 +319,46 @@ const PaymentPage = () => {
               />
             </div>
           </div>
-          <div className="order-details">
-            <h3>Order Details</h3>
-            <p>
-              <strong>Pickup Location:</strong> {paymentData.pickup}
-            </p>
-            <p>
-              <strong>Dropoff Location:</strong> {paymentData.dropoff}
-            </p>
-            <p>
-              <strong>Distance:</strong> {paymentData.distance.toFixed(2)} km
-            </p>
-            <p>
-              <strong>Base Price:</strong> ${calculatedPrice.basePrice}
-            </p>
-            <p>
-              <strong>Tax (13%):</strong> ${calculatedPrice.tax}
-            </p>
-            <p>
-              <strong>Total:</strong> ${calculatedPrice.total}
-            </p>
+          <div className="order-details" style={{ backgroundColor: "#f4f4f4", padding: "20px", borderRadius: "10px" }}>
+            <h3 style={{ color: "#00274d" }}>Order Details</h3>
+            <p><strong>Pickup Location:</strong> {paymentData.pickup}</p>
+            <p><strong>Dropoff Location:</strong> {paymentData.dropoff}</p>
+            <p><strong>Distance:</strong> {paymentData.distance.toFixed(2)} km</p>
+            <p><strong>Base Price:</strong> ${calculatedPrice.basePrice}</p>
+            <p><strong>Tax (13%):</strong> ${calculatedPrice.tax}</p>
+            <p><strong>Total:</strong> ${calculatedPrice.total}</p>
           </div>
+          {isPaymentCompleted && (
+            <div className="mt-4 d-flex justify-content-between">
+              <button onClick={downloadPDF} className="btn" style={{ backgroundColor: "#00274d", color: "white", padding: "10px 20px", border: "none", borderRadius: "5px" }}>Download Receipt</button>
+              <button className="btn" onClick={() => navigate("/user")} style={{ backgroundColor: "#00274d", color: "white", padding: "10px 20px", border: "none", borderRadius: "5px" }}>Continue Moving</button>
+            </div>
+          )}
+          <PayPalScriptProvider
+            options={{
+              "client-id": "AbgaAkmgJQttnf7-i6aJmEna8fELa8LuI9ieySIr1T5H8G61812V_mdC8MS5nM4NTYgALkqlS5_C7Gdo",
+            }}
+          >
+            <PayPalButtons
+              createOrder={(data, actions) =>
+                actions.order.create({
+                  purchase_units: [{ amount: { value: calculatedPrice.total } }],
+                })
+              }
+              onApprove={(data, actions) =>
+                actions.order.capture().then(handlePaymentSuccess)
+              }
+              onError={handlePaymentError}
+            />
+          </PayPalScriptProvider>
+          <button
+            className="btn mt-3"
+            onClick={() => navigate("/user")}
+            style={{ backgroundColor: "#e63946", color: "white", padding: "10px 10px", border: "none", borderRadius: "5px", width: "100%" }}
+          >
+            Cancel
+          </button>
         </div>
-        {isPaymentCompleted && (
-          <>
-            <button onClick={downloadPDF} className="download-pdf-btn">
-              Download Receipt
-            </button>
-            <button
-              className="continue-moving-btn"
-              onClick={() => navigate("/user")}
-            >
-              Continue Moving
-            </button>
-          </>
-        )}
-        <PayPalScriptProvider
-          options={{
-            "client-id":
-              "AbgaAkmgJQttnf7-i6aJmEna8fELa8LuI9ieySIr1T5H8G61812V_mdC8MS5nM4NTYgALkqlS5_C7Gdo",
-          }}
-        >
-          <PayPalButtons
-            createOrder={(data, actions) =>
-              actions.order.create({
-                purchase_units: [{ amount: { value: calculatedPrice.total } }],
-              })
-            }
-            onApprove={(data, actions) =>
-              actions.order.capture().then(handlePaymentSuccess)
-            }
-            onError={handlePaymentError}
-          />
-        </PayPalScriptProvider>
-        <button
-          className="cancel-payment-btn"
-          onClick={() => navigate("/user")}
-        >
-          Cancel
-        </button>
       </div>
     </div>
   );

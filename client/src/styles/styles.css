@@ -1079,9 +1079,43 @@ body {
   cursor: pointer;
 }
 
+/* General Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start; /* Align at the top */
+  justify-content: center;
+  padding-top: 50px; /* Space from the top */
+  z-index: 1000;
+}
 
+/* Popup Styling */
+.popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  animation: fadeIn 0.3s ease-in-out;
+}
 
-
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 
 /* ================== LOGIN AND REGISTRATION ================== */

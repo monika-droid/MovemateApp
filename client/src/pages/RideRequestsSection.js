@@ -37,13 +37,13 @@ const RideRequestsSection = () => {
 
   return (
     <section className="ride-requests-section">
-      <h2 className="ride-requests-title">Ride Requests</h2>
-      <div className="ride-requests-container">
+      <h2 className="text-center mb-4" style={{ color: '#00274d', fontWeight: '700', fontSize: '1.8rem' }}>Ride Requests</h2>
+      <div className="ride-requests-container d-flex flex-wrap gap-3 justify-content-center">
         {rideRequests.length === 0 ? (
-          <p className="no-requests-message">No ride requests available</p>
+          <p className="text-muted text-center">No ride requests available</p>
         ) : (
           rideRequests.map((request) => (
-            <div className="ride-request-card" key={request._id}>
+            <div className="ride-request-card shadow p-3 rounded" key={request._id} style={{ backgroundColor: '#ffffff', width: '300px' }}>
               <div className="ride-request-details">
                 <p><strong>User:</strong> {request.userId}</p>
                 <p><strong>Date:</strong> {new Date(request.date).toLocaleDateString()}</p>
@@ -51,23 +51,24 @@ const RideRequestsSection = () => {
                 <p><strong>Status:</strong> {request.status}</p>
               </div>
               {request.status === 'pending' && (
-                <>
+                <div className="d-flex justify-content-between mt-3">
                   <button
-                    className="confirm-btn"
+                    className="btn"
+                    style={{ backgroundColor: '#00274d', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '5px' }}
                     onClick={() => handleRideRequestUpdate(request._id, 'confirmed')}
                   >
                     Confirm
                   </button>
                   <button
-                    className="reject-btn"
+                    className="btn"
+                    style={{ backgroundColor: '#e63946', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '5px' }}
                     onClick={() => handleRideRequestUpdate(request._id, 'rejected')}
                   >
                     Reject
                   </button>
-                </>
+                </div>
               )}
             </div>
-
           ))
         )}
       </div>

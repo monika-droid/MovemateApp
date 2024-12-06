@@ -90,7 +90,6 @@ const Register = () => {
           backgroundColor: '#FFFFFF',
         }}
       >
-        {/* Form Section */}
         <div
           className="col-md-6 p-5 d-flex flex-column justify-content-center"
           style={{
@@ -316,17 +315,22 @@ const Register = () => {
           </div>
         </div>
 
-        {/* Image Section */}
         <div
           className="col-md-6 p-0"
           style={{
-            backgroundImage: 'url("../images/2.jpg")',
+            backgroundImage: 'url("../images/3.jpg")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         ></div>
       </div>
-      {showPopup && <Popup message={popupMessage} onClose={closePopup} />}
+      {showPopup && (
+        <Popup
+          message={popupMessage}
+          onClose={closePopup}
+          isSuccess={popupMessage.toLowerCase().includes('successful')}
+        />
+      )}
     </div>
   );
 };

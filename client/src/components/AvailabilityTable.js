@@ -1,3 +1,5 @@
+// AvailabilityTable.js
+
 import React, { useEffect, useState } from "react";
 import AvailabilityForm from "./AvailabilityForm";
 
@@ -32,7 +34,6 @@ const AvailabilityTable = ({ moverId }) => {
   };
 
   const handleUpdate = async (updatedData) => {
-    debugger
     const response = await fetch(`/api/availability/${updatedData._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -50,9 +51,9 @@ const AvailabilityTable = ({ moverId }) => {
 
   return (
     <div className="availability-table-container">
-      <h2>My Availability</h2>
-      <table className="table table-striped">
-        <thead>
+      <h2 className="text-center mb-4" style={{ color: '#00274d', fontWeight: '700', fontSize: '1.8rem' }}>My Availability</h2>
+      <table className="table table-striped table-bordered">
+        <thead className="thead-dark">
           <tr>
             <th>Date</th>
             <th>Time</th>
@@ -70,9 +71,9 @@ const AvailabilityTable = ({ moverId }) => {
               <td>{availability.province}</td>
               <td>{availability.city}</td>
               <td>{availability.pricePerKm}</td>
-              <td>
-                <button onClick={() => handleEdit(availability)}>Edit</button>
-                <button onClick={() => handleDelete(availability._id)}>Delete</button>
+              <td className="d-flex justify-content-around">
+                <button className="btn" style={{ backgroundColor: '#00274d', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '5px' }} onClick={() => handleEdit(availability)}>Edit</button>
+                <button className="btn" style={{ backgroundColor: '#e63946', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '5px' }} onClick={() => handleDelete(availability._id)}>Delete</button>
               </td>
             </tr>
           ))}

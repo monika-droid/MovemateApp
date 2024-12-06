@@ -1,26 +1,25 @@
-// src/components/VehicleRegistrationForm.js
 import React, { useState } from 'react';
-import apiService from '../Services/Services';  // Import your API service
+import apiService from '../Services/Services';
 import { useNavigate } from 'react-router-dom';
-import Popup from './Popup';  // Import Popup component
+import Popup from './Popup';
 
 const VehicleRegistrationForm = ({ moverId }) => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     licence_number: '',
-    mover_id: moverId ? moverId : '',
+    mover_id: moverId || '',
     vehicle_type: '',
     space_capacity: '',
     passenger_capacity: '',
     price_per_km: '',
-    availability_status: '', // Default value
+    availability_status: '',
   });
   const [errors, setErrors] = useState({});
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState(null); // Success or error status
-  const [showPopup, setShowPopup] = useState(false); // Control popup visibility
+  const [isSuccess, setIsSuccess] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,27 +40,22 @@ const VehicleRegistrationForm = ({ moverId }) => {
 
   const validateField = (name, value) => {
     let error = '';
-
     if (!value) {
       error = `${name.replace('_', ' ')} is required`;
-    } else if (name === 'space_capacity' || name === 'passenger_capacity' || name === 'price_per_km') {
-      if (isNaN(value) || value <= 0) {
-        error = `${name.replace('_', ' ')} must be a positive number`;
-      }
+    } else if (['space_capacity', 'passenger_capacity', 'price_per_km'].includes(name) && (isNaN(value) || value <= 0)) {
+      error = `${name.replace('_', ' ')} must be a positive number`;
     } else if (name === 'licence_number') {
-      const regex = /^[A-Z0-9]{1,3}\s?[A-Z0-9]{1,4}$/i; // Example Canadian license format
+      const regex = /^[A-Z0-9]{1,3}\s?[A-Z0-9]{1,4}$/i;
       if (!regex.test(value)) {
         error = 'Licence number must be in the format: ABC 1234';
       }
     } else if (name === 'availability_status' && !['true', 'false'].includes(value)) {
       error = 'Please select availability status';
     }
-
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
     }));
-
     return error === '';
   };
 
@@ -90,156 +84,135 @@ const VehicleRegistrationForm = ({ moverId }) => {
       setShowPopup(true);
       return;
     }
-
     const formData = new FormData();
     for (const key in form) {
       formData.append(key, form[key]);
     }
     if (image) formData.append('vehicle_image', image);
-
     try {
       const response = await apiService.postFormData('/vehicle', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-
-      // Success: Show message, reload the page
       setMessage(response.data.message || 'Vehicle registered successfully');
       setIsSuccess(true);
       setShowPopup(true);
-
-      // Reload page after a delay to allow the message to display
-      setTimeout(() => window.location.reload(), 2000); 
+      setTimeout(() => {
+        navigate('/dashboard');
+        window.location.reload();
+      }, 2000);
     } catch (error) {
-      // Error: Show error message
       setMessage(error.response?.data?.error || 'Failed to register vehicle');
       setIsSuccess(false);
       setShowPopup(true);
     }
   };
 
-  const closePopup = () => {
-    setShowPopup(false);  // Close the popup
-  };
-
-
   return (
-    <div className="vehicle-reg-container">
-      <div className="vehicle-reg-form-wrapper">
-        <h2 className="vehicle-reg-title">Register Your Vehicle</h2>
-        <form className="vehicle-reg-form" onSubmit={handleSubmit}>
-          <div className="vehicle-reg-row">
-            <div className="vehicle-reg-group">
-              <label htmlFor="licence_number">Licence Number</label>
-              <input
-                type="text"
-                id="licence_number"
-                name="licence_number"
-                value={form.licence_number}
+    <div
+      className="d-flex flex-column align-items-center justify-content-center vh-100"
+      style={{
+        fontFamily: "'Poppins', sans-serif",
+        backgroundColor: '#f4f4f4',
+        padding: '20px',
+      }}
+    >
+      <div
+        className="w-100 shadow-lg rounded p-5"
+        style={{
+          maxWidth: '1200px',
+          backgroundColor: '#FFFFFF',
+        }}
+      >
+        <h2
+          className="text-center mb-4"
+          style={{
+            color: '#00274d',
+            fontWeight: '700',
+            fontSize: '2rem',
+          }}
+        >
+          Register Your Vehicle
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div className="row g-4 align-items-center">
+            {[
+              { label: 'Licence Number', name: 'licence_number' },
+              { label: 'Mover ID', name: 'mover_id' },
+              { label: 'Vehicle Type', name: 'vehicle_type' },
+              { label: 'Space Capacity (cubic meters)', name: 'space_capacity', type: 'number' },
+              { label: 'Passenger Capacity', name: 'passenger_capacity', type: 'number' },
+              { label: 'Price per KM', name: 'price_per_km', type: 'number' },
+            ].map(({ label, name, type = 'text' }, index) => (
+              <div className="col-md-6 d-flex align-items-center" key={index}>
+                <label htmlFor={name} className="form-label me-3" style={{ flex: '0 0 150px', color: '#00274d', fontSize: '1rem' }}>
+                  {label}
+                </label>
+                <input
+                  type={type}
+                  id={name}
+                  name={name}
+                  className="form-control py-4"
+                  style={{ fontSize: '1.2rem', height: '55px', borderRadius: '10px', flex: '1' }}
+                  value={form[name]}
+                  onChange={handleChange}
+                />
+                {errors[name] && <span className="text-danger small mt-2 d-block w-100">{errors[name]}</span>}
+              </div>
+            ))}
+            <div className="col-md-6 d-flex align-items-center">
+              <label htmlFor="availability_status" className="form-label me-3" style={{ flex: '0 0 150px', color: '#00274d', fontSize: '1rem' }}>
+                Availability Status
+              </label>
+              <select
+                id="availability_status"
+                name="availability_status"
+                className="form-select py-4"
+                style={{ fontSize: '1.2rem', height: '55px', borderRadius: '10px', flex: '1' }}
+                value={form.availability_status}
                 onChange={handleChange}
-                required
-              />
-              {errors.licence_number && <span className="error">{errors.licence_number}</span>}
+              >
+                <option value="">Select</option>
+                <option value="true">Available</option>
+                <option value="false">Unavailable</option>
+              </select>
             </div>
-            <div className="vehicle-reg-group">
-              <label htmlFor="mover_id">Mover ID</label>
+            <div className="col-md-6 d-flex align-items-center">
+              <label htmlFor="vehicle_image" className="form-label me-3" style={{ flex: '0 0 150px', color: '#00274d', fontSize: '1rem' }}>
+                Vehicle Image
+              </label>
               <input
-                type="text"
-                id="mover_id"
-                name="mover_id"
-                value={form.mover_id}
-                onChange={handleChange}
-                required
+                type="file"
+                id="vehicle_image"
+                className="form-control py-4"
+                style={{ fontSize: '1.2rem', height: '55px', borderRadius: '10px', flex: '1' }}
+                onChange={handleImageChange}
               />
-              {errors.mover_id && <span className="error">{errors.mover_id}</span>}
-
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Vehicle Preview"
+                  className="img-fluid mt-3"
+                  style={{ maxHeight: '200px', borderRadius: '8px' }}
+                />
+              )}
             </div>
           </div>
-
-          <div className="vehicle-reg-row">
-            <div className="vehicle-reg-group">
-              <label htmlFor="vehicle_type">Vehicle Type</label>
-              <input
-                type="text"
-                id="vehicle_type"
-                name="vehicle_type"
-                value={form.vehicle_type}
-                onChange={handleChange}
-                required
-              />
-             {errors.vehicle_type && <span className="error">{errors.vehicle_type}</span>}
-            </div>
-            <div className="vehicle-reg-group">
-              <label htmlFor="space_capacity">Space Capacity (cubic meters)</label>
-              <input
-                type="number"
-                id="space_capacity"
-                name="space_capacity"
-                value={form.space_capacity}
-                onChange={handleChange}
-                required
-              />
-            {errors.space_capacity && <span className="error">{errors.space_capacity}</span>}
-
-            </div>
-          </div>
-
-          <div className="vehicle-reg-row">
-            <div className="vehicle-reg-group">
-              <label htmlFor="passenger_capacity">Passenger Capacity</label>
-              <input
-                type="number"
-                id="passenger_capacity"
-                name="passenger_capacity"
-                value={form.passenger_capacity}
-                onChange={handleChange}
-                required
-              />
-             {errors.passenger_capacity && <span className="error">{errors.passenger_capacity}</span>}
-            </div>
-            <div className="vehicle-reg-group">
-              <label htmlFor="price_per_km">Price per KM</label>
-              <input
-                type="number"
-                id="price_per_km"
-                name="price_per_km"
-                value={form.price_per_km}
-                onChange={handleChange}
-                required
-              />
-             {errors.price_per_km && <span className="error">{errors.price_per_km}</span>}
-
-            </div>
-          </div>
-
-          <div className="vehicle-reg-group">
-            <label htmlFor="availability_status">Availability Status</label>
-            <select
-              id="availability_status"
-              name="availability_status"
-              value={form.availability_status}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select</option>
-              <option value="true">Available</option>
-              <option value="false">Unavailable</option>
-            </select>
-          </div>
-
-          <div className="vehicle-reg-group">
-            <label htmlFor="vehicle_image">Vehicle Image</label>
-            <input type="file" id="vehicle_image" onChange={handleImageChange} />
-            {imagePreview && (
-              <img src={imagePreview} alt="Vehicle Preview" className="vehicle-reg-image-preview" />
-            )}
-          </div>
-
-          <button type="submit" className="vehicle-reg-submit-btn">Register Vehicle</button>
+          <button
+            type="submit"
+            className="btn w-100 mt-4"
+            style={{
+              backgroundColor: '#00274d',
+              color: 'white',
+              padding: '12px',
+              borderRadius: '8px',
+              fontWeight: '600',
+              fontSize: '1.2rem',
+            }}
+          >
+            Register Vehicle
+          </button>
         </form>
       </div>
-
       {showPopup && (
         <Popup
           message={message}
