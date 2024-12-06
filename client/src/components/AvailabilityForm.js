@@ -13,7 +13,6 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
     province: '',
     city: '',
     pricePerKm: '',
-
   });
   const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState('');
@@ -32,9 +31,7 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
           { headers }
         );
         setProvinces(response.data);
-      } catch (error) {
-        console.error('Error fetching provinces:', error);
-      }
+      } catch (error) {}
     };
     fetchProvinces();
   }, []);
@@ -48,9 +45,7 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
             { headers }
           );
           setCities(response.data);
-        } catch (error) {
-          console.error('Error fetching cities:', error);
-        }
+        } catch (error) {}
       };
       fetchCities();
     } else {
@@ -66,8 +61,6 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
       const dateObject = new Date(initialData.date);
       if (!isNaN(dateObject.getTime())) {
         setSelectedDate(dateObject);
-      } else {
-        console.error('Invalid date format:', initialData.date);
       }
     }
   }, [initialData]);
@@ -80,7 +73,6 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
     e.preventDefault();
     if (selectedDate && formData.time && formData.province && formData.city && formData.pricePerKm) {
       onSubmit({ ...formData, date: selectedDate.toISOString().split('T')[0], moverId: user.email });
-      console.log({ ...formData, date: selectedDate.toISOString().split('T')[0], moverId: user.email })
     } else {
       alert('Please fill out all fields.');
     }
@@ -89,7 +81,7 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
   return (
     <div className="popup-overlay">
       <div className="popup-content">
-        <h3>Add Availability</h3>
+        <h3>{formData._id ? 'Edit Availability' : 'Add Availability'}</h3>
         <form onSubmit={handleSubmit}>
           <select
             value={selectedProvince}
@@ -129,6 +121,7 @@ const AvailabilityForm = ({ onSubmit, initialData }) => {
               setSelectedDate(date);
               setFormData({ ...formData, date: date ? date.toISOString().split('T')[0] : '' });
             }}
+            minDate={new Date()}
             placeholderText="Select a date"
             required
           />

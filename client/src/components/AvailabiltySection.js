@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import AvailabilityForm from './AvailabilityForm';
 import apiService from '../Services/Services';
 import { useAuth } from '../Context/AuthContext';
+import { Edit2, Trash2 } from 'react-feather';
+import '../styles/AvailabilitySection.css';
+
 
 const AvailabilitySection = ({ availability, setAvailability }) => {
   const { authToken } = useAuth();
   const [showForm, setShowForm] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingData, setEditingData] = useState(null);
 
-  const handleAddAvailability = () => setShowForm(true);
+  const handleAddAvailability = () => {
+    setEditingData(null);
+    setShowForm(true);
+  };
 
   const handleFormSubmit = async (data) => {
     if (!data) {
@@ -17,19 +23,29 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
     }
 
     try {
-      await apiService.post('/availability', data, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
-      setAvailability([...availability, data]);
+      if (data._id) {
+        const response = await apiService.put(`/availability/${data._id}`, data, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        setAvailability((prev) =>
+          prev.map((item) => (item._id === response.data._id ? response.data : item))
+        );
+      } else {
+        const response = await apiService.post('/availability', data, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        setAvailability([...availability, response.data]);
+      }
     } catch (error) {
-      console.error('Error adding availability:', error);
+      console.error('Error saving availability:', error);
     } finally {
       setShowForm(false);
     }
   };
 
-  const handleEdit = (index) => {
-    setEditingIndex(index);
+  const handleEdit = (id) => {
+    const itemToEdit = availability.find((item) => item._id === id);
+    setEditingData(itemToEdit);
     setShowForm(true);
   };
 
@@ -49,38 +65,26 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
       <h2>My Availability</h2>
 
       {availability.length > 0 ? (
-        <div className="availability-container">
-          <table className="availability-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Province</th>
-                <th>City</th>
-                <th>Price per KM</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {availability.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.date}</td>
-                  <td>{item.time}</td>
-                  <td>{item.province}</td>
-                  <td>{item.city}</td>
-                  <td>{item.pricePerKm}</td>
-                  <td>
-                    <button onClick={() => handleEdit(item._id)} className="edit-btn">
-                      Edit
-                    </button>
-                    <button onClick={() => handleDelete(item._id)} className="delete-btn">
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="availability-card-container">
+          {availability.map((item) => (
+            <div className="availability-card" key={item._id}>
+              <div className="availability-card-content">
+                <p><strong>Date:</strong> {item.date.split('T')[0]}</p>
+                <p><strong>Time:</strong> {item.time}</p>
+                <p><strong>Province:</strong> {item.province}</p>
+                <p><strong>City:</strong> {item.city}</p>
+                <p><strong>Price per KM:</strong> {item.pricePerKm}</p>
+              </div>
+              <div className="availability-card-actions">
+                <button onClick={() => handleEdit(item._id)} className="edit-btn">
+                  <Edit2 size={18} />
+                </button>
+                <button onClick={() => handleDelete(item._id)} className="delete-btn">
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="no-availability-warning">
@@ -93,10 +97,7 @@ const AvailabilitySection = ({ availability, setAvailability }) => {
       </button>
 
       {showForm && (
-        <AvailabilityForm
-          onSubmit={handleFormSubmit}
-          initialData={editingIndex !== null ? availability[editingIndex] : {}}
-        />
+        <AvailabilityForm onSubmit={handleFormSubmit} initialData={editingData} />
       )}
     </section>
   );
