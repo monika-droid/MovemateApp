@@ -35,11 +35,11 @@ function Header({ userType, onNavigate }) {
       <nav className="header-nav">
         {userType !== 'mover' && (
           <>
+            <Link to="/user">Home</Link> {/* New link for Approved Rides */}
             <NavLink to="/getquotation" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
               Get Quotation
             </NavLink>
             <Link to="/user/approved-rides">Approved Rides</Link> {/* New link for Approved Rides */}
-            <Link to="/user/my-reservation">My Reservation</Link>
           </>
         )}
         {userType === 'mover' ? (
@@ -58,14 +58,6 @@ function Header({ userType, onNavigate }) {
       </nav>
 
       <div className="header-actions">
-        {userType !== 'mover' && (
-          <button
-            className="booking-button"
-            onClick={() => onNavigate('searchMovers')}
-          >
-            Book a Move
-          </button>
-        )}
         <div className="profile-section" onClick={toggleProfileDropdown}>
           <FaUserCircle className="profile-icon" />
           {profileDropdownOpen && (
