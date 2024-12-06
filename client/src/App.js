@@ -29,7 +29,7 @@ function App() {
           <Route path="/getquotation" element={<GetQuotation />} />
           <Route path="/reset-password" element={<PasswordReset />} />
           <Route path="/user/my-reservation" element ={<CustomerConfirmedRide/>} />
-          <Route path="/mover" element={
+o          <Route path="/mover" element={
             <ProtectedRoute requiredRole="Mover">
               <MoversDashboard />
             </ProtectedRoute>

@@ -10,20 +10,16 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyDNfZdDVW-G98BjDuOmOlEWmL74_J2eD6g";
 const libraries = ["places"];
 
 const ApprovedRides = () => {
+  
   const { user, authToken } = useAuth();
   const navigate = useNavigate();
   const [rideRequests, setRideRequests] = useState([]);
-  const [selectedLocations, setSelectedLocations] = useState({});
   const [error, setError] = useState("");
-  const [autocompleteFrom, setAutocompleteFrom] = useState(null);
-  const [autocompleteTo, setAutocompleteTo] = useState(null);
-  const [distance, setDistance] = useState(null);
+  const [autocompleteInstances, setAutocompleteInstances] = useState({});
+  const [formData, setFormData] = useState({});
+  const [distance, setDistance] = useState({});
+  const [price, setPrice] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [price, setPrice] = useState();
-  const [formData, setFormData] = useState({
-    movingFrom: "",
-    movingTo: "",
-  });
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
@@ -31,118 +27,151 @@ const ApprovedRides = () => {
   });
 
   useEffect(() => {
-    if (window.google) {
-      console.log("Google Maps is ready!");
-    }
-
     const fetchUserRequests = async () => {
       try {
         const response = await apiService.get(`/userRequests/${user.email}`);
         const confirmedRides = response.filter((ride) => ride.status === "confirmed");
+        setRideRequests(confirmedRides);
+
         if (confirmedRides.length === 0) {
           setError("No confirmed appointments found.");
         } else {
           setError("");
         }
-        setRideRequests(confirmedRides);
+
+        const initialFormData = {};
+        confirmedRides.forEach((ride) => {
+          initialFormData[ride._id] = { movingFrom: "", movingTo: "" };
+        });
+        setFormData(initialFormData);
       } catch (error) {
         console.error("Error fetching user ride requests:", error);
+        setError("Failed to fetch rides. Please try again later.");
       }
     };
 
     fetchUserRequests();
-  }, [user.email, authToken]);
+  }, [user.email]);
 
-  const handlePlaceChange = (field) => {
-    const autocomplete = field === "from" ? autocompleteFrom : autocompleteTo;
-    if (autocomplete) {
-      const place = autocomplete.getPlace();
+  const handlePlaceChange = (field, rideId) => {
+    const instance = autocompleteInstances[rideId]?.[field];
+    if (instance) {
+      const place = instance.getPlace();
       if (place && place.formatted_address) {
-        setFormData({
-          ...formData,
-          [field === "from" ? "movingFrom" : "movingTo"]: place.formatted_address,
-        });
+        setFormData((prev) => ({
+          ...prev,
+          [rideId]: {
+            ...prev[rideId],
+            [field]: place.formatted_address,
+          },
+        }));
       }
     }
   };
 
-  const handleManualInput = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleManualInput = (event, rideId) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [rideId]: {
+        ...prev[rideId],
+        [name]: value,
+      },
+    }));
   };
 
-  const validateForm = () => {
-    if (formData.movingFrom === formData.movingTo) {
-      setError('"Moving From" and "Moving To" cannot be the same.');
+  const handleAutocompleteLoad = (autocompleteInstance, field, rideId) => {
+    setAutocompleteInstances((prev) => ({
+      ...prev,
+      [rideId]: {
+        ...prev[rideId],
+        [field]: autocompleteInstance,
+      },
+    }));
+  };
+
+  const validateForm = (rideId) => {
+    const data = formData[rideId];
+    if (!data.movingFrom || !data.movingTo) {
+      setError("Both 'Moving From' and 'Moving To' fields are required.");
       return false;
     }
+    if (data.movingFrom === data.movingTo) {
+      setError("'Moving From' and 'Moving To' cannot be the same.");
+      return false;
+    }
+    setError("");
     return true;
   };
 
-  const calculateDistance = async () => {
+  const calculateDistance = async (rideId) => {
     const service = new window.google.maps.DistanceMatrixService();
     return new Promise((resolve, reject) => {
-      if (formData.movingFrom && formData.movingTo) {
-        service.getDistanceMatrix(
-          {
-            origins: [formData.movingFrom],
-            destinations: [formData.movingTo],
-            travelMode: window.google.maps.TravelMode.DRIVING,
-          },
-          (response, status) => {
-            if (status === "OK" && response.rows[0].elements[0].status === "OK") {
-              const distanceInKm = response.rows[0].elements[0].distance.value / 1000;
-              setDistance(distanceInKm);
-              resolve(distanceInKm);
-            } else {
-              reject("Unable to calculate distance.");
-            }
+      const data = formData[rideId];
+      service.getDistanceMatrix(
+        {
+          origins: [data.movingFrom],
+          destinations: [data.movingTo],
+          travelMode: window.google.maps.TravelMode.DRIVING,
+        },
+        (response, status) => {
+          if (status === "OK" && response.rows[0].elements[0].status === "OK") {
+            const distanceInKm = response.rows[0].elements[0].distance.value / 1000;
+            setDistance((prevDistance) => ({
+              ...prevDistance,
+              [rideId]: distanceInKm,
+            }));
+            resolve(distanceInKm);
+          } else {
+            reject("Unable to calculate distance.");
           }
-        );
-      } else {
-        reject("Both locations are required.");
-      }
+        }
+      );
     });
   };
 
-  const handlePayNow = (ride, movingFrom, movingTo, price, distance) => {
-    const paymentData = {
-      pickup: movingFrom,
-      dropoff: movingTo,
-      distance: distance,
-      price: price,
-      ride,
-    };
-
-    localStorage.setItem("paymentData", JSON.stringify(paymentData));
-    navigate("/payment");
-  };
-
-  const handleSubmit = async (e, moverId, location, date, time) => {
+  const handleSubmit = async (e, ride) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!validateForm()) {
+    if (!validateForm(ride._id)) {
       setIsSubmitting(false);
       return;
     }
 
     try {
       const moverData = {
-        moverId,
-        location,
-        date,
-        time,
+        moverId: ride.moverId,
+        location: ride.location,
+        date: ride.date,
+        time: ride.time,
       };
-      const moverDataresponse = await apiService.post(`/getMoverDetails`, moverData);
-      const distanceInKm = await calculateDistance();
-      const cost = (distanceInKm * moverDataresponse.pricePerKm).toFixed(2);
-      setPrice(cost);
+      const moverDataResponse = await apiService.post(`/getMoverDetails`, moverData);
+      const distanceInKm = await calculateDistance(ride._id);
+      const cost = (distanceInKm * moverDataResponse.pricePerKm).toFixed(2);
+      setPrice((prevPrice) => ({
+        ...prevPrice,
+        [ride._id]: cost,
+      }));
     } catch (error) {
       console.error("Error:", error);
+      setError("Failed to calculate price. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handlePayNow = (ride, rideId) => {
+    const paymentData = {
+      pickup: formData[rideId]?.movingFrom,
+      dropoff: formData[rideId]?.movingTo,
+      distance: distance[rideId],
+      price: price[rideId],
+      ride,
+    };
+
+    localStorage.setItem("paymentData", JSON.stringify(paymentData));
+    navigate("/payment");
   };
 
   if (loadError) {
@@ -155,9 +184,7 @@ const ApprovedRides = () => {
 
   return (
     <>
-      <div>
-        <Header userType="user" />
-      </div>
+      <Header userType="user" />
       <div className="confirmed-rides-section">
         <h2 className="confirmed-rides-title">My Rides</h2>
         {error ? (
@@ -167,79 +194,68 @@ const ApprovedRides = () => {
             {rideRequests.map((ride) => (
               <div className="confirmed-ride-card" key={ride._id}>
                 <div className="confirmed-ride-content">
-                  <p>
-                    <strong>Mover :</strong> {ride.moverId}
-                  </p>
-                  <p>
-                    <strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}
-                  </p>
-                  <p>
-                    <strong>Time:</strong> {ride.time}
-                  </p>
-                  <p>
-                    <strong>Location:</strong> {ride.location}
-                  </p>
-                  <p>
-                    <strong>Status:</strong> {ride.status}
-                  </p>
-                  <form
-                    className="quotation-form"
-                    onSubmit={(e) => handleSubmit(e, ride.moverId, ride.location, ride.date, ride.time)}
-                  >
+                  <p><strong>Mover:</strong> {ride.moverId}</p>
+                  <p><strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}</p>
+                  <p><strong>Time:</strong> {ride.time}</p>
+                  <p><strong>Location:</strong> {ride.location}</p>
+                  <p><strong>Status:</strong> {ride.status}</p>
+                  <form className="quotation-form" onSubmit={(e) => handleSubmit(e, ride)}>
                     <div className="quotation-form-group">
-                      <label htmlFor="movingFrom">Moving From</label>
+                      <label htmlFor={`movingFrom-${ride._id}`}>Moving From</label>
                       <Autocomplete
-                        onLoad={(autocomplete) => setAutocompleteFrom(autocomplete)}
-                        onPlaceChanged={() => handlePlaceChange("from")}
+                        onLoad={(instance) => handleAutocompleteLoad(instance, "from", ride._id)}
+                        onPlaceChanged={() => handlePlaceChange("from", ride._id)}
                       >
                         <input
                           type="text"
-                          id="movingFrom"
+                          id={`movingFrom-${ride._id}`}
                           name="movingFrom"
                           className="quotation-input"
-                          value={formData.movingFrom}
-                          onChange={handleManualInput}
+                          value={formData[ride._id]?.movingFrom || ""}
+                          onChange={(e) => handleManualInput(e, ride._id)}
                           placeholder="Enter your current location"
                           required
                         />
                       </Autocomplete>
                     </div>
                     <div className="quotation-form-group">
-                      <label htmlFor="movingTo">Moving To</label>
+                      <label htmlFor={`movingTo-${ride._id}`}>Moving To</label>
                       <Autocomplete
-                        onLoad={(autocomplete) => setAutocompleteTo(autocomplete)}
-                        onPlaceChanged={() => handlePlaceChange("to")}
+                        onLoad={(instance) => handleAutocompleteLoad(instance, "to", ride._id)}
+                        onPlaceChanged={() => handlePlaceChange("to", ride._id)}
                       >
                         <input
                           type="text"
-                          id="movingTo"
+                          id={`movingTo-${ride._id}`}
                           name="movingTo"
                           className="quotation-input"
-                          value={formData.movingTo}
-                          onChange={handleManualInput}
+                          value={formData[ride._id]?.movingTo || ""}
+                          onChange={(e) => handleManualInput(e, ride._id)}
                           placeholder="Enter your destination"
                           required
                         />
                       </Autocomplete>
                     </div>
-                    <button type="submit" className="quotation-submit" disabled={isSubmitting}>
+                    <button
+                      type="submit"
+                      className="quotation-submit"
+                      disabled={isSubmitting}
+                    >
                       {isSubmitting
                         ? "Generating..."
-                        : price && distance
-                        ? `Pay $${price} for ${distance} km`
+                        : price[ride._id] && distance[ride._id]
+                        ? `Pay $${price[ride._id]} for ${distance[ride._id]} km`
                         : "GET FINAL PRICE"}
                     </button>
-                    {price && distance && (
-                      <button
-                        className="pay-now-btn"
-                        onClick={() =>
-                          handlePayNow(ride, formData.movingFrom, formData.movingTo, price, distance)
-                        }
-                      >
-                        Confirm Payment
-                      </button>
-                    )}
                   </form>
+                  {price[ride._id] && distance[ride._id] && (
+                    <button
+                      className="pay-now-button"
+                      onClick={() => handlePayNow(ride, ride._id)}
+                    >
+                      Pay Now
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
