@@ -35,6 +35,7 @@ const PaymentPage = () => {
     postalCode: "",
   });
   const [sameAsBilling, setSameAsBilling] = useState(false);
+  const [isPaymentCompleted, setIsPaymentCompleted] = useState(false);
 
   useEffect(() => {
     const data = localStorage.getItem("paymentData");
@@ -72,7 +73,7 @@ const PaymentPage = () => {
 
   const handlePaymentSuccess = () => {
     alert("Payment was successful!");
-    navigate("/user");
+    setIsPaymentCompleted(true);
   };
 
   const handlePaymentError = () => {
@@ -301,9 +302,19 @@ const PaymentPage = () => {
             </p>
           </div>
         </div>
-        <button onClick={downloadPDF} className="download-pdf-btn">
-          Download Receipt
-        </button>
+        {isPaymentCompleted && (
+          <>
+            <button onClick={downloadPDF} className="download-pdf-btn">
+              Download Receipt
+            </button>
+            <button
+              className="continue-moving-btn"
+              onClick={() => navigate("/user")}
+            >
+              Continue Moving
+            </button>
+          </>
+        )}
         <PayPalScriptProvider
           options={{
             "client-id":
