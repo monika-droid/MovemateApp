@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import Header from "../components/Header";
 import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 import "../styles/PaymentPage.css";
 import { State, City } from "country-state-city";
 
@@ -83,27 +84,50 @@ const PaymentPage = () => {
   const downloadPDF = () => {
     if (!paymentData) return;
     const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("MoveMate - Payment Receipt", 20, 20);
+    doc.setFont("times");
+    doc.setFontSize(20);
+    doc.text("MoveMate", 105, 20, { align: "center" });
     doc.setFontSize(12);
-    doc.text(`Pickup Location: ${paymentData.pickup}`, 20, 40);
-    doc.text(`Dropoff Location: ${paymentData.dropoff}`, 20, 50);
-    doc.text(`Distance: ${paymentData.distance.toFixed(2)} km`, 20, 60);
-    doc.text(`Base Price: $${calculatedPrice.basePrice}`, 20, 70);
-    doc.text(`Tax (13%): $${calculatedPrice.tax}`, 20, 80);
-    doc.text(`Total Price: $${calculatedPrice.total}`, 20, 90);
-    doc.text(`Billing Address:`, 20, 110);
+    doc.text("299 Doon Valley Dr, Kitchener, ON N2G 4M4", 105, 30, { align: "center" });
+
+    doc.setFontSize(14);
+    doc.text(`Order ID: ${paymentData.ride._id}`, 20, 50);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 50);
+
+    doc.setFontSize(12);
+    doc.text("Billing Address | Shipping Address", 20, 70);
     doc.text(
-      `${billingAddress.firstName} ${billingAddress.lastName}, ${billingAddress.address}, ${billingAddress.city}, ${billingAddress.province}, ${billingAddress.postalCode}`,
+      `${billingAddress.firstName} ${billingAddress.lastName} | ${shippingAddress.firstName} ${shippingAddress.lastName}`,
       20,
-      120
+      80
     );
-    doc.text(`Shipping Address:`, 20, 140);
     doc.text(
-      `${shippingAddress.firstName} ${shippingAddress.lastName}, ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.province}, ${shippingAddress.postalCode}`,
+      `${billingAddress.address}, ${billingAddress.city}, ${billingAddress.province}, ${billingAddress.postalCode} | ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.province}, ${shippingAddress.postalCode}`,
       20,
-      150
+      90
     );
+
+    autoTable(doc, {
+      startY: 100,
+      head: [["Pickup Location", "Dropoff Location", "Distance (km)", "Price"]],
+      body: [
+        [
+          paymentData.pickup,
+          paymentData.dropoff,
+          paymentData.distance.toFixed(2),
+          `$${calculatedPrice.basePrice}`,
+        ],
+      ],
+    });
+
+    autoTable(doc, {
+      startY: doc.lastAutoTable.finalY + 10,
+      body: [
+        ["Tax (13%)", `$${calculatedPrice.tax}`],
+        ["Total Price", `$${calculatedPrice.total}`],
+      ],
+    });
+
     doc.save(`Receipt_${paymentData.ride._id}.pdf`);
   };
 
